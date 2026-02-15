@@ -96,9 +96,12 @@ function Home() {
         <button>FAZER ATENDIMENTO</button>
       </article>
 
+      <hr className='separator'/>
       <footer>
-        <h3>Ubran Cut</h3>
-        <p>Estilo $ Elegancia since 2024</p>
+        <div className="footer-section">
+          <h3>Urban Cut</h3>
+          <p>Estilo & Elegancia since 2024</p>
+        </div>
         <a href="#">Área do Administrador</a>
       </footer>
 
