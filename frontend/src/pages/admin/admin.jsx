@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
 import '../admin/admin.css';
 
 function Admin() {
@@ -11,22 +13,60 @@ function Admin() {
 
     //Função para atualizar o estado conforme o usuário digita
     const handleChange = (e) => {
-        const {id, value, usuario} = e.target;
+        const {id, value} = e.target;
         //O id ou  name do input deve ser igual a chave no objeto formData
         setFormData({
             ...formData,
-            [id || usuario]: value
+            [id]: value
         });
     };
 
     // Função para lidar com o envio do formulário
+    // const handleSubmit = (e) => {
+    //     e.preventDefault(); //Impede o recarregamento da página
+    //     console.log("Dados do Agendamento:", formData);
+    //     // alert(`Iniciando Login ${formData.usuario}!`);
+    //     Swal.fire({
+    //         title: 'Login em andamento',
+    //         text: `Iniciando Login para o usuário: ${formData.usuario}`,
+    //         icon: 'info',
+    //         confirmButtonText: 'Entendido',
+    //         confirmButtonColor: '#6200ee',
+    //     });
+    //     /* 
+    //         Aqui no futuro faremos a chamada para a API/Banco de dados
+    //     */
+    // };
+
+
     const handleSubmit = (e) => {
-        e.preventDefault(); //Impede o recarregamento da página
-        console.log("Dados do Agendamento:", formData);
-        alert(`Iniciando Login ${formData.usuario}!`);
-        /* 
-            Aqui no futuro faremos a chamada para a API/Banco de dados
-        */
+        e.preventDefault();
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end', // Canto superior direito
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            // Estilização customizada usando suas variáveis
+            background: '#1d1d1d', // Semelhante ao seu --background-card
+            color: '#fff',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: `Bem-vindo, ${formData.usuario}!`,
+            text: 'Login iniciado com sucesso.',
+            // Customização fina de CSS via JS
+            customClass: {
+                popup: 'my-custom-toast',
+                title: 'my-custom-title'
+            }
+        });
     };
 
     return (

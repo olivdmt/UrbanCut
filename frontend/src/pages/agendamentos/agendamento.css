@@ -119,7 +119,7 @@ p {
 }
 
 .forms-group input:hover,
-.forms-group input::selection
+.forms-group input::selection,
 .forms-group select:hover {
     border: 1px solid var(--highlight);
     background-color: transparent;
@@ -182,7 +182,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         padding-top: 80px; /* Espaço para o botão voltar que está absoluto */
     }
 
-    .btn-back {
+    .btn-back-agd {
         left: 20px; /* Traz o botão para a lateral no mobile */
         top: 20px;
     }

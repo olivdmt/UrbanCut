@@ -10,7 +10,7 @@ import '../admin/admin'
 import cliente from '../../assets/client.png'
 import workbench from '../../assets/workbench.png'
 import hairBeard from '../../assets/hair_beard.png'
-
+import logo from '../../assets/icon.png'
 
 function Home() {
   const [count, setCount] = useState()
@@ -20,7 +20,8 @@ function Home() {
     <div className='container'>
       <section className='hero-section'>
         <h4>ESTILO & ELEGÂNCIA</h4>
-        <h1>💈Urban Cut💈</h1>
+        {/* <h1>💈Urban Cut💈</h1> */}
+        <img className='logo' src={logo} alt="" />
         <p>A arte de cuidar do seu visual com excelência. <br />
           Profissionalismo, qualidadee e estilo em cada atendimento.
         </p>
