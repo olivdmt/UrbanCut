@@ -26,3 +26,7 @@ body {
   /* -webkit-font-smoothin: antialiased; */
 }
 
+h1 {
+  font-family: 'Playfair Display', sans-serif;
+}
+

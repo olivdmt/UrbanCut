@@ -1,11 +1,14 @@
 import { useState } from 'react'
 // import reactLogo from '../assets/react.svg'
 // import viteLogo from '/vite.svg'
+import { Link } from 'react-router-dom'
 import './style.css'
 
-import cliente from '../assets/client.png'
-import workbench from '../assets/workbench.png'
-import hairBeard from '../assets/hair_beard.png'
+import '../agendamentos/agendamentos'
+
+import cliente from '../../assets/client.png'
+import workbench from '../../assets/workbench.png'
+import hairBeard from '../../assets/hair_beard.png'
 
 
 function Home() {
@@ -20,7 +23,9 @@ function Home() {
         <p>A arte de cuidar do seu visual com excelência. <br />
           Profissionalismo, qualidadee e estilo em cada atendimento.
         </p>
+        <Link to="/scheduling">
         <button>AGENDAR HORÁRIO</button>
+        </Link>
       </section>  
 
       <section className='services'>
@@ -93,7 +98,9 @@ function Home() {
       <article className='end-page'>
         <h2>Pronto para transformar seu visual?</h2>
         <p>Agende seu horario e experimente o melhor serviço de barbearia da cidade</p>
-        <button>FAZER ATENDIMENTO</button>
+        <Link to="/scheduling">
+          <button>FAZER ATENDIMENTO</button>
+        </Link>
       </article>
 
       <hr className='separator'/>
@@ -109,4 +116,4 @@ function Home() {
   )
 }
 
-export default Home
+export default Home;

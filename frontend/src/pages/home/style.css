@@ -4,7 +4,7 @@
   --font-high: 'Playfair Display', sans-serif;
   --font-secundary: 'Bebas Neue', sans-serif;
   --btn: rgb(255, 204, 0);
-  /* --background: #0a090a; */
+  --background: #0a090a;
 }
 
 body, html {
@@ -35,7 +35,7 @@ body, html {
   align-items: center;
   color: white;
 
-  background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.6)), url('../assets/barber-side.jpeg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.927), rgba(0, 0, 0, 0.752)), url('../../assets/barber-side.jpeg');
   background-size: cover;;
   background-position: center;
 }
@@ -63,13 +63,15 @@ body, html {
 
 .hero-section button {
   background-color: var(--btn);
-  padding: 10px 5%;
+  /* padding: 10px 20%; */
+  padding: 10px;
   border-radius: 5px;
   border: none;
   font-weight: 550;
   font-size: 1.0rem;
   cursor: pointer;
   transition: all ease 0.7s;
+  /* white-space: nowrap; */
 }
 
 .hero-section button:hover {
@@ -244,7 +246,8 @@ body, html {
 
 .end-page button {
   background: var(--btn);
-  padding: 10px 5%;
+  /* padding: 10px 5%; */
+  padding: 20px;
   border-radius: 5px;
   border: none;
   font-weight: 550;

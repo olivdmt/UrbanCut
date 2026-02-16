@@ -1,0 +1,226 @@
+#root {
+    --highlight: rgb(255, 145, 0);
+    --blue-color: rgb(0, 255, 251);
+    --alternative-text: rgb(147, 145, 145);
+    --font-high: 'Playfair Display', sans-serif;
+    --font-secundary: 'Bebas Neue', sans-serif;
+    --btn: rgb(255, 204, 0);
+    --background: #0a090a;
+    --background-card: rgba(29, 29, 29, 0.566);
+    --font-lighter: 'Inter', sans-serif;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding-top: 50px;
+}
+
+.btn-back {
+    position: absolute;    
+    top: 70px;
+    left: 410px;
+}
+
+.btn-back button {
+    color: var(--alternative-text);
+    background-color: transparent;
+    border: transparent;
+    cursor: pointer;
+    font-size: 1.0rem;
+    padding: 10px;
+    white-space: nowrap;
+    border-radius: 5px;
+    transition: all 1s ease;
+}
+
+.btn-back button:hover {
+    /* background-color: var(--btn); */
+    /* border: 1px solid var(--btn); */
+    color: var(--btn);
+}
+
+.agendamentos {
+    background: var(--background-card);
+    border: 1px solid rgba(171, 171, 171, 0.196);
+    border-radius: 10px;
+    /* padding: 50px; */
+    width: 700px;
+    height: 600px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 40px;
+}
+
+.head {
+    margin-bottom: 80px;
+}
+
+h1 {
+    color: #fff;
+    font-size: 2.4rem;
+    margin-bottom: 5px;
+}
+
+p {
+    color: var(--alternative-text);
+}
+
+.input-group-primary {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.form {
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.forms-group  {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Define o tamanho dos inputs para largura total*/
+    gap: 20px; /* Define o espaçamento entre os elementos */
+}
+
+.forms-group label {
+    color: #fff;
+    font-weight: 400;
+    margin-left: 10px;
+    font-family: var(--font-lighter);
+}
+
+.forms-group i {
+    color: var(--highlight);
+}
+
+
+.forms-group input,
+.forms-group select {
+    background-color: rgba(80, 80, 80, 0.196);
+    border: 1px solid rgba(147, 145, 145, 0.249);
+    padding: 15px;
+    border-radius: 5px;
+    color: var(--alternative-text);
+    outline: none;
+}
+
+.forms-group input:hover,
+.forms-group input::selection
+.forms-group select:hover {
+    border: 1px solid var(--highlight);
+    background-color: transparent;
+    
+}
+
+.forms-group input:focus,
+.forms-group input:checked,
+.forms-group select:focus, 
+.forms-group select:checked {
+    border: 1px solid var(--blue-color);
+    background:transparent;
+}
+
+.forms-group select {
+    cursor: pointer;
+}
+
+.forms-group option {
+    background-color: rgb(27, 27, 27);
+    color: #fff;
+    padding: 10px;
+}
+
+.forms-group option:focus,
+.forms-group option:checked,
+.forms-group option:hover {
+    color: var(--btn);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(0.5) sepia(1) saturate(5) hue-rotate(10deg); 
+    /* O filtro acima tenta chegar próximo ao laranja/dourado */
+}
+
+.agendamentos button {
+    background: var(--btn);
+    border: none;
+    padding: 10px;
+    color: #0a090a;
+    font-weight: 700;
+    font-size: 1.0rem;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: all 0.4s ease;
+}
+
+.agendamentos button:hover {
+    transform: translateY(-10px);
+    background: rgb(0, 255, 251);
+    cursor: pointer;
+}
+
+/* --- RESPONSIVIDADE --- */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        padding-top: 80px; /* Espaço para o botão voltar que está absoluto */
+    }
+
+    .btn-back {
+        left: 20px; /* Traz o botão para a lateral no mobile */
+        top: 20px;
+    }
+
+    .agendamentos {
+        width: 100%;       /* Ocupa a largura total da tela */
+        height: auto;      /* Deixa o conteúdo definir a altura */
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .head {
+        margin-bottom: 40px; /* Reduz o espaço excessivo no topo */
+    }
+
+    h1 {
+        font-size: 1.8rem;  /* Texto menor para telas pequenas */
+    }
+
+    .input-group-primary {
+        flex-direction: column; /* Inputs de nome/tel e data/hora ficam um embaixo do outro */
+        gap: 20px;
+    }
+
+    .forms-group {
+        gap: 10px; /* Reduz espaçamento entre label e input */
+    }
+
+    .agendamentos button {
+        width: 100%; /* Botão de confirmar ocupa toda a largura */
+        padding: 15px;
+    }
+}
+
+/* Ajuste fino para celulares muito pequenos */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    p {
+        font-size: 0.9rem;
+    }
+}
+
+
