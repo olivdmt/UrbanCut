@@ -2,7 +2,7 @@ import { useState } from 'react'
 // import reactLogo from '../assets/react.svg'
 // import viteLogo from '/vite.svg'
 import { Link } from 'react-router-dom'
-import './style.css'
+import './home.css'
 
 import '../agendamentos/agendamentos'
 import '../admin/admin'
@@ -10,18 +10,22 @@ import '../admin/admin'
 import cliente from '../../assets/client.png'
 import workbench from '../../assets/workbench.png'
 import hairBeard from '../../assets/hair_beard.png'
+import cb from '../../assets/cb.png';
 import logo from '../../assets/icon.png'
 
 function Home() {
   const [count, setCount] = useState()
 
   return (
+  <>
+    <div className="background-fixed">
 
+    </div>
     <div className='container'>
       <section className='hero-section'>
         <h4>ESTILO & ELEGÂNCIA</h4>
         {/* <h1>💈Urban Cut💈</h1> */}
-        <img className='logo' src={logo} alt="" />
+        <img className='logo' src={logo} alt="Logo marca da empresa" />
         <p>A arte de cuidar do seu visual com excelência. <br />
           Profissionalismo, qualidadee e estilo em cada atendimento.
         </p>
@@ -53,11 +57,20 @@ function Home() {
           </div>
   
           <div className="hero-slider">
-            <img src={hairBeard} alt="Corte + Barba" />
+            <img src={hairBeard} alt="Sobrancelha" />
             <h4>Sobrancelha</h4>
             <div className="price-container">
-              <span className='price'>R$ 20</span>
-              <span className='time'>5 min</span>
+              <span className='price'>R$ 5</span>
+              <span className='time'>3 min</span>
+            </div>
+          </div>
+
+          <div className="hero-slider">
+            <img src={cb} alt="Corte + Barba" />
+            <h4>Corte + Barba</h4>
+            <div className="price-container">
+              <span className='price'>R$ 40</span>
+              <span className='time'>20 min</span>
             </div>
           </div>
         </div>
@@ -117,6 +130,7 @@ function Home() {
       </footer>
 
     </div>
+  </>
   )
 }
 

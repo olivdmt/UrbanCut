@@ -119,11 +119,19 @@ p {
 }
 
 .forms-group input:hover,
-.forms-group input::selection,
 .forms-group select:hover {
     border: 1px solid var(--highlight);
-    background-color: transparent;
-    
+}
+
+.forms-group input::selection {
+    /* background-color: var(--highlight); */
+    color: #0fd7bc;
+    background-color: #0fd7bc;
+}
+
+.forms-group input::-moz-selection {
+    background-color: var(--highlight);
+    color: #000000;
 }
 
 .forms-group input:focus,
@@ -172,6 +180,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transform: translateY(-10px);
     background: rgb(0, 255, 251);
     cursor: pointer;
+    color: #fff;
+    box-shadow: 0 5px 25px rgba(255, 145, 0, 0.355);
 }
 
 /* --- RESPONSIVIDADE --- */

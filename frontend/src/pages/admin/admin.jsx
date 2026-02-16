@@ -48,7 +48,7 @@ function Admin() {
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
-            // Estilização customizada usando suas variáveis
+            // Estilização customizada usando minhas variáveis
             background: '#1d1d1d', // Semelhante ao seu --background-card
             color: '#fff',
             didOpen: (toast) => {

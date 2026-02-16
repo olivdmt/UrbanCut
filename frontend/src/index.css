@@ -23,7 +23,7 @@ body {
   background-color:  #0a090a;
   min-height: 100vh;
   line-height: 1.5;
-  /* -webkit-font-smoothin: antialiased; */
+  -webkit-font-smoothin: antialiased;
 }
 
 h1 {
