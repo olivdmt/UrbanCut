@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import './style.css'
 
 import '../agendamentos/agendamentos'
+import '../admin/admin'
 
 import cliente from '../../assets/client.png'
 import workbench from '../../assets/workbench.png'
@@ -109,7 +110,9 @@ function Home() {
           <h3>Urban Cut</h3>
           <p>Estilo & Elegancia since 2024</p>
         </div>
-        <a href="#">Área do Administrador</a>
+        <Link to="/adminPage" className='footer-link'>
+          Área do Administrador
+        </Link>
       </footer>
 
     </div>

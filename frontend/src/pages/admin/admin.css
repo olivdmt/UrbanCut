@@ -18,13 +18,13 @@
     padding-top: 50px;
 }
 
-.btn-back {
+.btn-back-adm {
     position: absolute;    
     top: 70px;
-    left: 410px;
+    left: 510px;
 }
 
-.btn-back button {
+.btn-back-adm button {
     color: var(--alternative-text);
     background-color: transparent;
     border: transparent;
@@ -36,19 +36,23 @@
     transition: all 1s ease;
 }
 
-.btn-back button:hover {
+.btn-back-adm i {
+    margin-right: 10px;
+}
+
+.btn-back-adm button:hover {
     /* background-color: var(--btn); */
     /* border: 1px solid var(--btn); */
     color: var(--btn);
 }
 
-.agendamentos {
+.admin {
     background: var(--background-card);
     border: 1px solid rgba(171, 171, 171, 0.196);
     border-radius: 10px;
     /* padding: 50px; */
-    width: 700px;
-    height: 600px;
+    width: 500px;
+    height: 540px;
     display: flex;
     justify-content: start;
     align-items: start;
@@ -71,11 +75,6 @@ p {
     color: var(--alternative-text);
 }
 
-.input-group-primary {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
 
 .form {
     gap: 20px;
@@ -103,8 +102,7 @@ p {
 }
 
 
-.forms-group input,
-.forms-group select {
+.forms-group input {
     background-color: rgba(80, 80, 80, 0.196);
     border: 1px solid rgba(147, 145, 145, 0.249);
     padding: 15px;
@@ -114,44 +112,26 @@ p {
 }
 
 .forms-group input:hover,
-.forms-group input::selection
-.forms-group select:hover {
+.forms-group input::selection {
     border: 1px solid var(--highlight);
     background-color: transparent;
-    
 }
 
 .forms-group input:focus,
-.forms-group input:checked,
-.forms-group select:focus, 
-.forms-group select:checked {
+.forms-group input:checked {
     border: 1px solid var(--blue-color);
     background:transparent;
 }
 
-.forms-group select {
+
+input::-ms-reveal {
     cursor: pointer;
-}
-
-.forms-group option {
-    background-color: rgb(27, 27, 27);
-    color: #fff;
-    padding: 10px;
-}
-
-.forms-group option:focus,
-.forms-group option:checked,
-.forms-group option:hover {
-    color: var(--btn);
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    filter: invert(0.5) sepia(1) saturate(5) hue-rotate(10deg); 
+    /* filter: invert(0.5) sepia(1) saturate(5) hue-rotate(10deg);  */
+    filter: invert(100%); 
     /* O filtro acima tenta chegar próximo ao laranja/dourado */
 }
 
-.agendamentos button {
+.admin button {
     background: var(--btn);
     border: none;
     padding: 10px;
@@ -161,12 +141,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-radius: 5px;
     margin-top: 20px;
     transition: all 0.4s ease;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 10px;
 }
 
-.agendamentos button:hover {
+.admin button:hover {
     transform: translateY(-10px);
     background: rgb(0, 255, 251);
     cursor: pointer;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(255, 145, 0, 0.419);
 }
 
 /* --- RESPONSIVIDADE --- */
@@ -177,13 +165,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         padding-top: 80px; /* Espaço para o botão voltar que está absoluto */
     }
 
-    .btn-back {
+    .btn-back-adm {
         left: 20px; /* Traz o botão para a lateral no mobile */
         top: 20px;
     }
 
-    .agendamentos {
-        width: 100%;       /* Ocupa a largura total da tela */
+    .admin {
+        width: 60%;       /* Ocupa a largura total da tela */
         height: auto;      /* Deixa o conteúdo definir a altura */
         padding: 20px;
         margin-bottom: 30px;
@@ -197,16 +185,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         font-size: 1.8rem;  /* Texto menor para telas pequenas */
     }
 
-    .input-group-primary {
-        flex-direction: column; /* Inputs de nome/tel e data/hora ficam um embaixo do outro */
-        gap: 20px;
-    }
-
     .forms-group {
         gap: 10px; /* Reduz espaçamento entre label e input */
     }
 
-    .agendamentos button {
+    .admin button {
         width: 100%; /* Botão de confirmar ocupa toda a largura */
         padding: 15px;
     }

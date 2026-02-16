@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from 'react-router-dom';
-import './style.css';
+import '../agendamentos/agendamento.css';
 
 function Agendamentos() {
     //Criamos um objeto de estado para todos os campos
@@ -36,7 +36,7 @@ function Agendamentos() {
 
         <div className="container">
 
-            <div className="btn-back">
+            <div className="btn-back-agd">
                 <Link to="/">
                     <button><i className="fa-solid fa-arrow-left"></i> Voltar</button>
                 </Link>
