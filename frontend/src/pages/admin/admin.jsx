@@ -108,7 +108,7 @@ function Admin() {
                         />
                     </div>
 
-                    <button>ENTRAR</button>
+                    <Link to="/dashboard"><button>ENTRAR</button></Link>
                 </form>
             </section>
 

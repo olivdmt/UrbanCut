@@ -1,0 +1,214 @@
+#root {
+    --highlight: rgb(255, 145, 0);
+    --blue-color: rgb(0, 255, 251);
+    --alternative-text: rgb(147, 145, 145);
+    --font-high: 'Playfair Display', sans-serif;
+    --font-secundary: 'Bebas Neue', sans-serif;
+    --btn: rgb(255, 204, 0);
+    --background: #0a090a;
+    --background-card: rgba(29, 29, 29, 0.566);
+    --font-lighter: 'Inter', sans-serif;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    text-align: start;
+    width: 135vh;
+    margin-bottom: 50px;
+}
+
+
+.filter {
+    background: var(--background-card);
+    width: 70vw; 
+    height: auto; /* Mudei para auto para não cortar conteúdo em telas menores */
+    display: flex;
+    flex-direction: column; /* Organiza o título acima do form */
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(147, 145, 145, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.filter h3 {
+    margin-bottom: 20px;
+    font-family: var(--font-secundary);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    left: 0; /* Removido o left: 80px para alinhar à esquerda */
+}
+
+.filter i {
+    color: var(--highlight);
+}
+
+.formsubmit {
+    display: flex;
+
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 25px;
+}
+
+.filter-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1; 
+    min-width: 200px;
+}
+
+.filter-groups label {
+    font-family: var(--font-lighter);
+    font-size: 0.9rem;
+    color: var(--alternative-text);
+}
+
+.filter-groups input {
+    background: rgba(10, 9, 10, 0.8);
+    outline: none;
+    border: 1px solid rgba(147, 145, 145, 0.3);
+    border-radius: 6px;
+    padding: 12px;
+    color: #fff; /* Texto digitado agora é branco puro */
+    transition: 0.3s;
+}
+
+.filter-groups input:focus {
+    border-color: var(--highlight);
+    box-shadow: 0 0 8px rgba(255, 145, 0, 0.2);
+}
+
+/* Estilização da Agenda (Tabela) */
+.agenda {
+    width: 70vw;
+    margin-top: 50px;
+}
+
+.agenda h3 {
+    font-family: var(--font-secundary);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--background-card);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.dash-table th {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    text-align: left;
+    color: var(--highlight);
+    font-family: var(--font-lighter);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.dash-table td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(147, 145, 145, 0.1);
+    font-family: var(--font-lighter);
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.status-badge.pendente {
+    background: rgba(255, 145, 0, 0.2);
+    color: var(--highlight);
+}
+
+.status-badge.confirmado {
+    background: rgba(0, 255, 251, 0.2);
+    color: var(--blue-color);
+}
+
+
+.filter-groups button {
+    background: transparent;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    color: #ff4d4d;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-groups button:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+.btn-back-dash {
+    position: absolute;    
+    top: 70px;
+    left: 140vh;
+}
+
+.btn-back-dash button {
+    color: var(--alternative-text);
+    background-color: transparent;
+    border: transparent;
+    cursor: pointer;
+    font-size: 1.0rem;
+    padding: 10px;
+    white-space: nowrap;
+    border-radius: 5px;
+    transition: all 1s ease;
+}
+
+.btn-back-dash i {
+    margin-right: 10px;
+}
+
+.btn-back-dash button:hover {
+    /* background-color: var(--btn); */
+    /* border: 1px solid var(--btn); */
+    color: var(--btn);
+}
+
+.btn-delete {
+    background: transparent;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    color: #ff4d4d;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-delete:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+.btn-edit {
+    background: transparent;
+    border: 1px solid #ff95003c;
+    color: #ffbb00;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-edit:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
