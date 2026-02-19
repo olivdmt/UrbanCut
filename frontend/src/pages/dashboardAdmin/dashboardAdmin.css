@@ -212,3 +212,85 @@
     background: #ff4d4d;
     color: #fff;
 }
+
+/* ==========================================================
+   MEDIA QUERIES (ADICIONE AO FINAL DO SEU ARQUIVO CSS)
+   ========================================================== */
+
+/* TABLETS (Telas de até 1024px) */
+@media (max-width: 1024px) {
+    .filter, .agenda, .header {
+        width: 90vw; /* Aumenta a largura para ocupar melhor tablets */
+    }
+
+    .btn-back-dash {
+        left: 20px; /* Reposiciona o botão de volta de forma segura */
+        position: relative;
+        top: 0;
+    }
+}
+
+/* CELULARES (Telas de até 768px) */
+@media (max-width: 768px) {
+    .header {
+        width: 95vw;
+        margin-bottom: 30px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .filter {
+        width: 95vw;
+        padding: 20px;
+    }
+
+    /* Faz os campos de filtro ficarem um abaixo do outro */
+    .formsubmit {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .filter-groups {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .agenda {
+        width: 95vw;
+    }
+
+    /* Permite que a tabela tenha scroll horizontal para não quebrar o layout */
+    .agenda-section {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .dash-table {
+        min-width: 600px; /* Mantém a estrutura da tabela legível no scroll */
+    }
+
+    .btn-back-dash {
+        left: 0;
+        margin-bottom: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+    }
+}
+
+/* CELULARES PEQUENOS (Telas de até 480px) */
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .status-badge {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+
+    .btn-edit, .btn-delete {
+        padding: 6px; /* Botões um pouco menores para economizar espaço */
+    }
+}
