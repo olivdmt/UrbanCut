@@ -376,8 +376,23 @@ footer a:hover::after {
     margin-top: 80px;
   }
 
+  .services {
+    padding: 0 20px;
+    text-align:  center;
+  }
+
   .services h2 {
-    font-size: 2.5rem; /* Reduzido de 4rem */
+    font-size: 2.2rem; /* Reduzido de 4rem */
+    /* padding: 0 20px; */
+    line-height: 1.2;
+    word-wrap: break-word; /* Força a quebra correta se a palavra for muito grande*/
+    margin: 15px auto 20px auto;
+    width: 100%;
+    text-align:  center;
+  }
+
+  .our-services{
+    font-size: 1.1rem;
   }
 
   .end-page h2 {
@@ -395,8 +410,15 @@ footer a:hover::after {
 
   .hero-slider {
     width: 100%; /* Card ocupa a largura da tela no mobile */
+    max-width: 320px;
     margin-top: 10px;
-    padding: 25px;
+    padding: 20px;
+  }
+
+  .hero-slider img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
   }
 
   /* 3. Ajuste da Seção de Diferenciais (Features) */
@@ -443,5 +465,21 @@ footer a:hover::after {
 
   .hero-slider h4 {
     white-space: normal; /* Permite que o texto quebre linha se for longo */
+  }
+}
+
+/* Ajuste para Monitores Grandes e Ultra-wide */
+@media (min-width: 1440px) {
+  .card-hero-slider, 
+  .services, 
+  .end-page,
+  .feature-section {
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .logo {
+    width: 20%; /* Reduz um pouco o destaque da logo em telas imensas */
   }
 }

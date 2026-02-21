@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -8,7 +8,7 @@ function Admin() {
     //Criamos um objeto de estado para todos os campos
     const [formData, setFormData] = useState({
         usuario: ''
-        // senha: '',
+
     });
 
     //Função para atualizar o estado conforme o usuário digita

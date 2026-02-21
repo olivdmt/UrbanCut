@@ -7,8 +7,6 @@ function DashboardAdmin() {
 
     // --- ESTADOS (STATES) ---
     
-    // Lista principal que aparece na tabela. 
-    // Começa com 3 objetos fixos para teste.
     const [agendamentos, setAgendamentos] = useState([
         { id: 1, nome: "Joaquim Barbosa", servico: "Corte Masculino", data: "2026-02-18", horario: "10:00h", status: "Pendente" },
         { id: 2, nome: "Paola Oliveira", servico: "Sobrancelha", data: "2026-03-21", horario: "14:00h", status: "Confirmado" },
@@ -39,6 +37,16 @@ function DashboardAdmin() {
             background: '#1d1d1d',
             color: '#fff',
             html: `
+                <style>
+                    .swal-custom-select option {
+                        background-color: #1d1d1d;
+                        color: #fff;
+                    }
+
+                    select.swal-custom-select:focus {
+                        border-color: #7066e0;
+                    }
+                </style>
                 <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
                     <label>Nome do Cliente</label>
                     <input id="swal-nome" class="swal2-input" value="${agendamento.nome}" style="margin: 0; width: 100%;">
@@ -51,6 +59,17 @@ function DashboardAdmin() {
                     
                     <label>Horário</label>
                     <input id="swal-horario" type="text" class="swal2-input" value="${agendamento.horario}" style="margin: 0; width: 100%;">
+
+                    <label>Status</label>
+                    <select
+                        id="swal-status"
+                        class="swal2-input swal-custom-select"
+                        style="margin: 0; width: 100%; color: #fff; background: #333; border: 1px solid rgba(147, 145, 145, 0.249); outline: none;"
+                        value=${formData.status}
+                    >
+                        <option value="Pendente" ${agendamento.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                        <option value="Confirmado" ${agendamento.status === 'Confirmado' ? 'selected' : ''}>Confirmado</option>
+                    </select>
                 </div>
             `,
             focusConfirm: false,
@@ -65,7 +84,8 @@ function DashboardAdmin() {
                     nome: document.getElementById('swal-nome').value,
                     servico: document.getElementById('swal-servico').value,
                     data: document.getElementById('swal-data').value,
-                    horario: document.getElementById('swal-horario').value
+                    horario: document.getElementById('swal-horario').value,
+                    status: document.getElementById('swal-status').value
                 }
             }
         });
@@ -127,8 +147,8 @@ function DashboardAdmin() {
             <div className="container">
                 {/* Botão de navegação para voltar à Home */}
                 <div className="btn-back-dash">
-                    <Link to="/">
-                        <button><i className="fa-solid fa-arrow-left"></i> Voltar</button>
+                    <Link to="/adminPage">
+                        <button><i className="fa-solid fa-right-from-bracket"></i> Logout</button>
                     </Link>
                 </div>
 

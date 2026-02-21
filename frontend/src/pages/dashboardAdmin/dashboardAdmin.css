@@ -35,7 +35,7 @@
 
 .filter h3 {
     margin-bottom: 20px;
-    font-family: var(--font-secundary);
+    font-family: var(--font-lighter);
     font-size: 1.5rem;
     display: flex;
     align-items: center;
@@ -91,7 +91,7 @@
 }
 
 .agenda h3 {
-    font-family: var(--font-secundary);
+    font-family: var(--font-lighter);
     margin-bottom: 20px;
     font-size: 1.8rem;
 }
