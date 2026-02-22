@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Link para navegação via clique, useNavigate para via código
-import { API} from '../../services/api'
+import API from '../../services/api'
 import Swal from "sweetalert2"; // Biblioteca de alertas visuais
 import "../admin/admin.css";
 
