@@ -34,60 +34,48 @@ app.post('/agendamentos', async (req, res) => {
 });
 
 //Rota para Atualizar o agendamento
-app.put('/agendamentos/:id', async (req, res) =>{
-    const { id } = req.params;
-    const { nome, telefone, servico, data, horario } = req.body;
-    try {
-        const atualizado = await knex('agendamentos')
-            .where({id})
-            .update({
-                nome,
-                telefone,
-                servico,
-                data,
-                horario
-            })
-            .returning("*");
+app.put("/agendamentos/:id", async (req, res) => {
+  const { id } = req.params;
+  const { nome, telefone, servico, data, horario, status } = req.body;
 
-            if (atualizado) {
-                res.json({ 
-                    message: "Appointment updating with sucefull!",
-                    data: atualizado
-                });
-            } else {
-                res.status(404).json({ error: "Appointment not found"});
-            }
-    }catch ( error) {
-        res.status(500).json({ error: "Erro updating data:" + error.message});
+  try {
+    const atualizado = await knex("agendamentos")
+      .where({ id })
+      .update({ nome, telefone, servico, data, horario, status })
+      .returning("*");
+
+    if (atualizado.length > 0) {
+      return res.json({
+        message: "Appointment updated successfully!",
+        data: atualizado[0],
+      });
     }
+
+    return res.status(404).json({ error: "Appointment not found" });
+  } catch (error) {
+    return res.status(500).json({ error: "Erro updating data:" + error.message });
+  }
 });
 
 // Rota para deletar os agendamentos 
 app.delete('/agendamentos/:id', async (req, res) => {
     const { id } = req.params;
-    const { nome, telefone, servico, data, horario } = req.body;
     try {
         const deletado = await knex('agendamentos')
             .where({id})
-            .delete({
-                nome,
-                telefone,
-                servico,
-                data,
-                horario
-            })
+            .del()
             .returning('*');
 
-            if (deletado) {
-                res.json({
+            if (deletado.length > 0) {
+                return res.json({
                     message: "Appointment deleted with sucefull!",
-                    data: deletado
+                    data: deletado[0],
                 });
-            } else {
-                res.status(404).json({ error: "Appointment not found"});
             }
+
+            return res.status(404).json({ error: "Appointment not found" });
     } catch (error) {
-        res.status(500).json({ error: "Error deleted data:" + error.message})
+        res.status(500).json({ error: "Error deleting data:" + error.message})
     }
 });
 
