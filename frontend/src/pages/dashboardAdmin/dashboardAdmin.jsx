@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import '../dashboardAdmin/dashboardAdmin.css'
 
 function DashboardAdmin() {
 
+    const navigate = useNavigate(); // Inicializa a função de navegação
     // --- ESTADOS (STATES) ---
     
     const [agendamentos, setAgendamentos] = useState([
@@ -12,6 +13,32 @@ function DashboardAdmin() {
         { id: 2, nome: "Paola Oliveira", servico: "Sobrancelha", data: "2026-03-21", horario: "14:00h", status: "Confirmado" },
         { id: 3, nome: "Richard Rasmussen", servico: "Corte + Barba", data: "2026-05-20", horario: "09:00h", status: "Pendente" },
     ]);
+
+    // Função disparada ao clicar no botão "Sair"
+    function logout() {
+        // Exibi uma caixa de diálogo de confirmação
+        Swal.fire({
+            title: "Sair da conta?",
+            text: "Você será desconectado da área de administrativa.",
+            icon: "question", // Icone de interrogação
+            background: '#1d1d1d',
+            color: '#fff',
+            showCancellButton: true, 
+            confirmButtonText: "Sair",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#e53935",
+        }).then((result) => {
+            // Verifica se o usuário clicou no botão de confirmação (Sair)
+            if (result.isConfirmed) {
+                // REMOÇÃO DO TOKEN
+                // Apaga a "chave" de acesso do navegador
+                // A partir daqui, o "PrivateRoute" bloqueara o acesso a esta página
+                localStorage.removeItem("admin_token");
+                // Redireciona o usuário para a página de login
+                navigate("/adminPage");
+            }
+        });
+    }
 
     // Estado para armazenar o que o usuário digita nos campos de filtro
     const [formData, setFormData] = useState({
@@ -98,7 +125,7 @@ function DashboardAdmin() {
             ));
             
             Swal.fire({
-                icon: 'success', // Corrigido para success
+                icon: 'success', 
                 title: 'Atualizado!',
                 text: 'O agendamento foi modificado com sucesso.',
                 timer: 2000,
@@ -147,9 +174,7 @@ function DashboardAdmin() {
             <div className="container">
                 {/* Botão de navegação para voltar à Home */}
                 <div className="btn-back-dash">
-                    <Link to="/adminPage">
-                        <button><i className="fa-solid fa-right-from-bracket"></i> Logout</button>
-                    </Link>
+                        <button><i className="fa-solid fa-right-from-bracket" onClick={logout}></i> Sair</button>
                 </div>
 
                 <section className="header">

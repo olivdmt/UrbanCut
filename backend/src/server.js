@@ -91,56 +91,75 @@ app.delete('/agendamentos/:id', async (req, res) => {
     }
 });
 
+// Define uma rota do tipo GET no endereço "/admin/agendamentos"
+// 'requireAdmin' é um middleware de proteção que verifica se o usuário é administrador antes de prosseguir
+app.get("/admin/agendamentos", requireAdmin, async (req, res) => {
+    try {
+        // 'knex("agendamentos")' acessa a tabela chamada "agendamentos" no banco de dados
+        // '.select("*")' seleciona todas as colunas de todos os registros
+        // 'await' espera a consulta ao banco ser finalizada para continuar
+        const agendamentos = await knex("agendamentos").select("*");
+
+        // Se a busca der certo, envia os agendamentos de volta para o cliente no formato JSON
+        res.json(agendamentos);
+
+    } catch (error) {
+        // Caso ocorra qualquer falha (perda de conexão com o banco, erro de sintaxe, etc.)
+        // Retorna o status HTTP 500 (Erro Interno do Servidor) e uma mensagem explicativa
+        res.status(500).json({ error: "Erro ao buscar agendamentos" });
+    }
+});
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // Middleware: exige token de admin
 function requireAdmin(req, res, next) {
-    const auth = req.headers.authorization; // "Bearer <token>"
-    const token = auth && auth.startWith("bearer ") ? auth.slice(7) : null;
+  const auth = req.headers.authorization; // "Bearer <token>"
+  const token = auth && auth.startsWith("Bearer ") ? auth.slice(7) : null;
 
-    if (!token) return res.status(401).json({ error: "Token ausente"});
+  if (!token) return res.status(401).json({ error: "Token ausente" });
 
-    try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
-        if (payload.role !== "admin") {
-            return res.status(403).json({ error: "Acesso negado" });
-        }
-        req.adminId= payload.sub;
-        next();
-    } catch (err) {
-        return res.status(401).json({ error: "Token inválido ou expirado" });
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    if (payload.role !== "admin") {
+      return res.status(403).json({ error: "Acesso negado" });
     }
+    req.adminId = payload.sub;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: "Token inválido ou expirado" });
+  }
 }
 
-// Rota: LOGIN ADMIN
+// LOGIN ADMIN
 app.post("/admin/login", async (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    try {
-        const admin = await knex("admins")
-        .select("id", "name", "email", "password_hash")
-        .where({ email })
-        .first();
+  try {
+    const admin = await knex("admins")
+      .select("id", "name", "email", "password_hash")
+      .where({ email })
+      .first();
 
-        if (!admin) return res.status(401).json({ error: "Credenciais inválidas" });
+    if (!admin) return res.status(401).json({ error: "Credenciais inválidas" });
 
-        const ol = await bcrypt.compare(password, admin.password_hash);
-        if (!ok) return res.status(401).json({ error: "Credenciais inválidas" });
+    const ok = await bcrypt.compare(password, admin.password_hash);
+    if (!ok) return res.status(401).json({ error: "Credenciais inválidas" });
 
-        const token = jwt.sign(
-            { sub: admin.id, role: "admin" },
-            process.env.JWT_SECRET,
-            { expiresIn: "2h" }
-        );
-        
-        return res.json({
-            token,
-            admin: { id: admin.id, name: admin.name, email: admin.email },
-        });
-    } catch (error) {
-        return res.status(500).json({ error: "Erro no login: " + error.message });
-    }
+    const token = jwt.sign(
+      { sub: admin.id, role: "admin" },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }
+    );
+
+    return res.json({
+      token,
+      admin: { id: admin.id, name: admin.name, email: admin.email },
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Erro no login: " + error.message });
+  }
 });
 
 

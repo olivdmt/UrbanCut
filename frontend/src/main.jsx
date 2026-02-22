@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import PrivateRoute from './pages/routes/PrivateRoute';
 
 import './index.css';
 
@@ -13,10 +14,20 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
+        {/* Rotas publicas qualquer um pode acessar*/}
         <Route path="/" element={<Home />} />
         <Route path="/scheduling" element={<Agendamentos />} />
         <Route path="/adminPage" element={<AdminPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Rotas protegidas*/}
+        <Route
+          path='/dashboard'
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+         />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
