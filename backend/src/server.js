@@ -12,13 +12,22 @@ app.use(cors());
 app.use(express.json()); // Para o express entender JSON no corpo das requisições
 
 // Rota para LISTAR todos os agendamentos do banco
-app.get('/agendamentos', async (req, res) => {
-    try {
-        const agendamentos = await knex('agendamentos').select('*');
-        res.json(agendamentos);
-    } catch (error) {
-        res.status(500).json({error: error.message});
-    }
+app.get("/agendamentos", async (req, res) => {
+  try {
+    const agendamentos = await knex("agendamentos").select("*");
+    res.json(agendamentos);
+  } catch (error) {
+    console.error("❌ ERRO /agendamentos:", error);
+    console.error("❌ ERRO message:", error?.message);
+    console.error("❌ ERRO code:", error?.code);
+    console.error("❌ ERRO detail:", error?.detail);
+
+    res.status(500).json({
+      error: error?.message || "Erro ao buscar agendamentos",
+      code: error?.code,
+      detail: error?.detail,
+    });
+  }
 });
 
 //Rota para adicionar um novo agendamento no banco
