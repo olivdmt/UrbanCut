@@ -183,6 +183,7 @@ function DashboardAdmin() {
         if (!formValues) return;
 
         try {
+            // Faz a requisição no Backend na rota "/agendamentos"
             const res = await fetch(`${API}/agendamentos/${agendamento.id}`, {
                 method: "PUT",
                 headers: {
@@ -191,6 +192,8 @@ function DashboardAdmin() {
                 body: JSON.stringify(formValues),
             });
 
+            // Se a resiquisição não tiver sucesso
+            // Exibi o erro
             if (!res.ok) {
                 const msg = await res.text();
                 throw new Error(`HTTP ${res.status} - ${msg}`);

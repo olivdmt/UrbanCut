@@ -23,10 +23,12 @@
 
 .btn-back-adm {
     position: static;
-    width: 500px;
+    width: 100%;
+    max-width: 600px;
     margin-bottom: 10px;
     display: flex;
     justify-content: flex-start;
+    box-sizing: border-box;
 }
 
 .btn-back-adm button {
@@ -56,8 +58,9 @@
     border: 1px solid rgba(171, 171, 171, 0.196);
     border-radius: 10px;
     /* padding: 50px; */
-    width: 500px;
-    height: 540px;
+    width: 600px;
+    min-height: 540px;
+    height: auto;
     display: flex;
     justify-content: start;
     align-items: start;
@@ -167,19 +170,23 @@ input::-ms-reveal {
 @media (max-width: 768px) {
     .container {
         padding: 20px;
-        padding-top: 80px; /* Espaço para o botão voltar que está absoluto */
+        padding-top: 50px; /* Espaço para o botão voltar que está absoluto */
     }
 
     .btn-back-adm {
-        left: 20px; /* Traz o botão para a lateral no mobile */
-        top: 20px;
+        max-width: 90%;
+        margin-bottom: 20px;
     }
 
     .admin {
-        width: 60%;       /* Ocupa a largura total da tela */
+        width: 90%;       /* Ocupa a largura total da tela */
         height: auto;      /* Deixa o conteúdo definir a altura */
-        padding: 20px;
-        margin-bottom: 30px;
+        padding: 30px 20px;
+        /* margin-bottom: 30px; */
+    }
+
+    .admin button {
+        width: 100%;
     }
 
     .head {

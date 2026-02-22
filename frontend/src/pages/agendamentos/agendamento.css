@@ -21,10 +21,12 @@
 
 .btn-back-agd {
     position: static; /* Remove o absolute */
-    width: 700px;     /* Mesma largura do seu card de agendamentos */
+    width: 100%;     /* Mesma largura do seu card de agendamentos */
+    max-width: 700px;
     margin-bottom: 10px; /* Espaço entre o botão e o card */
     display: flex;
     justify-content: flex-start;
+    box-sizing: border-box;
 }
 
 .btn-back-agd button {
@@ -196,7 +198,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 
     .btn-back-agd {
-        left: 20px; /* Traz o botão para a lateral no mobile */
+        left: 50px; /* Traz o botão para a lateral no mobile */
         top: 20px;
     }
 
