@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Link para navegação via clique, useNavigate para via código
+import API from '../../services/api'
 import Swal from "sweetalert2"; // Biblioteca de alertas visuais
 import "../admin/admin.css";
 
@@ -27,7 +28,7 @@ function Admin() {
 
     try {
       // Faz a chamada para a API no backend
-      const res = await fetch("http://localhost:3001/admin/login", {
+      const res = await fetch(`${API}/admin/login`, {
         method: "POST", // Método para envio de dados sensíveis
         headers: {
           "Content-Type": "application/json", // Indica que estamos enviando um JSON

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import API from '../../services/api'
 
 import '../agendamentos/agendamento.css';
 
@@ -27,7 +28,7 @@ function Agendamentos() {
 
         try {
             // Faz a chamada para a API na rota "/agendamentos" no backend
-            const res = await fetch("http://localhost:3001/agendamentos", {
+            const res = await fetch(`${API}/agendamentos`, {
                 method: "POST", // Método para envio de dados sensíveis
                 headers: {
                     "Content-Type": "application/json", // Indica que estamos enviando um JSON 

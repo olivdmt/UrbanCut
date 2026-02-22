@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import API from '../../services/api'
+
 import '../dashboardAdmin/dashboardAdmin.css'
 
 function DashboardAdmin() {
@@ -181,7 +183,7 @@ function DashboardAdmin() {
         if (!formValues) return;
 
         try {
-            const res = await fetch(`http://localhost:3001/agendamentos/${agendamento.id}`, {
+            const res = await fetch(`${API}/agendamentos/${agendamento.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -269,7 +271,7 @@ function DashboardAdmin() {
             // Se o usuário confirmou a exclusão
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch(`http://localhost:3001/agendamentos/${id}`, {
+                    const res = await fetch(`${API}/agendamentos/${id}`, {
                         method: 'DELETE'
                     });
 
@@ -311,7 +313,7 @@ function DashboardAdmin() {
     async function showAppointments(e) {
         try {
          // Faz a chamada na API    
-         const res = await fetch("http://localhost:3001/agendamentos", {
+         const res = await fetch(`${API}/agendamentos`, {
             method: "GET"
          })
          // Se houver error na busca pela API
