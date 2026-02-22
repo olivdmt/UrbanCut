@@ -17,7 +17,7 @@ app.get('/agendamentos', async (req, res) => {
         const agendamentos = await knex('agendamentos').select('*');
         res.json(agendamentos);
     } catch (error) {
-        res.status(500).json("Error: Don't possible query data");
+        res.status(500).json({error: error.message});
     }
 });
 
@@ -155,7 +155,7 @@ app.post("/admin/login", async (req, res) => {
  --- > ROTAS DE CADASTRO DE USUÁRIO < ----
 ==========================================*/
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+    console.log(`Servidor rodando em ${PORT}`);
 });

@@ -107,47 +107,24 @@ function Agendamentos() {
         });
     };
 
-    // Função para lidar com o envio do formulário
-    // const handleSubmit = (e) => {
-    //     e.preventDefault(); //Impede o recarregamento da página
-    //     console.log("Dados do Agendamento:", formData);
-    //     alert(`Agendamento confirmado para ${formData.nome}!`);
-    //     /* 
-    //         Aqui no futuro faremos a chamada para a API/Banco de dados
-    //     */
-    // };
+    function maskTelefone(value) {
+        // Remove tudo que não for número
+        let v = value.replace(/\D/g, "");
 
-    // const handleSubmit = (e) => {
-    //     //Impede o recarregamento da página
-    //     e.preventDefault();
+        // Limita a 11 dígitos (DDD + 9 dígitos)
+        v = v.slice(0, 11);
 
-    //     const Toast = Swal.mixin({
-    //         toast: true,
-    //         position: 'top-end', // Canto superior direito
-    //         showConfirmButton: false,
-    //         timer: 3000,
-    //         timerProgressBar: true,
-    //         // Estilização customizada usando minhas variáveis
-    //         background: '#1d1d1d', //Semelhante ao meu background
-    //         color: '#fff',
-    //         didOpen: (toast) => {
-    //             toast.addEventListener('mouseenter', Swal.stopTimer)
-    //             toast.addEventListener('mouseleave', Swal.resumeTimer)
-    //         }
-    //     })
+        // Aplica a máscara: (00) 0 0000-0000
+        if (v.length > 6) {
+            v = v.replace(/^(\d{2})(\d{1})(\d{4})(\d{0,4}).*/, "($1) $2 $3-$4");
+        } else if (v.length > 2) {
+            v = v.replace(/^(\d{2})(\d{0,1})(\d{0,4}).*/, "($1) $2 $3");
+        } else if (v.length > 0) {
+            v = v.replace(/^(\d{0,2}).*/, "($1");
+        }
 
-    //     Toast.fire({
-    //         icon: 'success',
-    //         title: `Agendamento realizado, ${formData.nome}!`,
-    //         text: `Te aguardo em ${formData.data} as ${formData.horario}`,
-    //         // Customização final de CSS via JS
-    //         customClass: {
-    //             popup: 'my-custom-toast',
-    //             title: 'my-custom-title'
-    //         }
-    //     })
-        
-    // }
+        return v;
+        }
 
     return (
 
@@ -184,7 +161,8 @@ function Agendamentos() {
                                 id="telefone"
                                 placeholder="(000) 0 0000-0000"
                                 value={formData.telefone}
-                                onChange={handleChange}
+                                onChange={(e) => setFormData({ ...formData, telefone: maskTelefone(e.target.value),
+                                })}
                              />
                         </div>
                     </div>
