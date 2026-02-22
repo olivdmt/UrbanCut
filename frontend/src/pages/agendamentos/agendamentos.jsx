@@ -1,10 +1,16 @@
 import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 import '../agendamentos/agendamento.css';
 
 function Agendamentos() {
+
+    const navigate = useNavigate(); // Inicializa a função de navegação
+
+    /// Inicializa o estado para carregamento
+    const [loading, setLoading] = useState(false);
+    
     //Criamos um objeto de estado para todos os campos
     const [formData, setFormData] = useState({
         nome: '',
@@ -13,6 +19,83 @@ function Agendamentos() {
         data: '',
         horario: '',
     });
+
+    // Função que lida com o envio do formulário (Agendamentos)
+    async function handleSubmit(e) {
+        e.preventDefault(); // Impede o carregamento da padráo da página
+        setLoading(true); // Bloqueia o botão
+
+        try {
+            // Faz a chamada para a API na rota "/agendamentos" no backend
+            const res = await fetch("http://localhost:3001/agendamentos", {
+                method: "POST", // Método para envio de dados sensíveis
+                headers: {
+                    "Content-Type": "application/json", // Indica que estamos enviando um JSON 
+                },
+                // Aqui enviaremos uma requisção e passamos os dados que serão enviados
+                body: JSON.stringify(formData),
+            });
+
+            // Converte a resposta do servidor para objeto JavaScript
+            const data = await res.json();
+
+            // Verifica se a reposta HTTP indica erro (ex: 401 ou 404)
+            if (!res.ok) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Não foi possível fazer o agendamento",
+                    text: data.error || "Dados inválidos",
+                    background: "#1d1d1d",
+                    color: "#fff",
+                });
+                return; // Interrompe a execução aqui se houver erro
+            }
+
+             // Reseta os campos após o envio do formulário
+                setFormData({ 
+                    nome: "",
+                    telefone: "",
+                    servico: "",
+                    data: "",
+                    horario: "",
+                })
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end", // Canto superior direito
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                // Estilização
+                background: "#1d1d1d",
+                color: "#fff",
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseLeave', Swal.resumeTimer)
+                }
+            })
+                
+            Toast.fire({
+                icon: "success",
+                title: `Agendamento realizado, ${formData.nome}!`,
+                text: `Aguardamos você no dia ${formData.data} as ${formData.horario}!`,
+                customClass: {
+                    popup: 'my-custom-toast',
+                    title: 'my-custom-title'
+                }
+            });
+            setLoading(false);
+        } catch (err) {
+            //Caso o servidor estaja offline ou ocrra erro de rede
+            Swal.fire({
+                icon: "error",
+                title: "Erro de conexão",
+                text: "Não foi possível conectar ao servidor.",
+            });
+        } finally {
+            setLoading(false);
+        }
+    }
 
     //Função para atualizar o estado conforme o usuário digita
     const handleChange = (e) => {
@@ -34,37 +117,37 @@ function Agendamentos() {
     //     */
     // };
 
-    const handleSubmit = (e) => {
-        //Impede o recarregamento da página
-        e.preventDefault();
+    // const handleSubmit = (e) => {
+    //     //Impede o recarregamento da página
+    //     e.preventDefault();
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end', // Canto superior direito
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            // Estilização customizada usando minhas variáveis
-            background: '#1d1d1d', //Semelhante ao meu background
-            color: '#fff',
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
+    //     const Toast = Swal.mixin({
+    //         toast: true,
+    //         position: 'top-end', // Canto superior direito
+    //         showConfirmButton: false,
+    //         timer: 3000,
+    //         timerProgressBar: true,
+    //         // Estilização customizada usando minhas variáveis
+    //         background: '#1d1d1d', //Semelhante ao meu background
+    //         color: '#fff',
+    //         didOpen: (toast) => {
+    //             toast.addEventListener('mouseenter', Swal.stopTimer)
+    //             toast.addEventListener('mouseleave', Swal.resumeTimer)
+    //         }
+    //     })
 
-        Toast.fire({
-            icon: 'success',
-            title: `Agendamento realizado, ${formData.nome}!`,
-            text: `Te aguardo em ${formData.data} as ${formData.horario}`,
-            // Customização final de CSS via JS
-            customClass: {
-                popup: 'my-custom-toast',
-                title: 'my-custom-title'
-            }
-        })
+    //     Toast.fire({
+    //         icon: 'success',
+    //         title: `Agendamento realizado, ${formData.nome}!`,
+    //         text: `Te aguardo em ${formData.data} as ${formData.horario}`,
+    //         // Customização final de CSS via JS
+    //         customClass: {
+    //             popup: 'my-custom-toast',
+    //             title: 'my-custom-title'
+    //         }
+    //     })
         
-    }
+    // }
 
     return (
 
@@ -154,7 +237,7 @@ function Agendamentos() {
                         </div>
                     </div>
 
-                    <button>CONFIRMAR AGENDAMENTO</button>
+                    <button disabled={loading}>{loading ? "Enviando..." : "CONFIRMAR AGENDAMENTO"}</button>
                 </form>
             </section>
 

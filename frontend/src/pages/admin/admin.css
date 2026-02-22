@@ -14,6 +14,7 @@
 
 .container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
@@ -21,9 +22,11 @@
 }
 
 .btn-back-adm {
-    position: absolute;    
-    top: 70px;
-    left: 510px;
+    position: static;
+    width: 500px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .btn-back-adm button {

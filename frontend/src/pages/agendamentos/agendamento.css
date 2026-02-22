@@ -12,6 +12,7 @@
 
 .container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
@@ -19,9 +20,11 @@
 }
 
 .btn-back-agd {
-    position: absolute;    
-    top: 70px;
-    left: 400px;
+    position: static; /* Remove o absolute */
+    width: 700px;     /* Mesma largura do seu card de agendamentos */
+    margin-bottom: 10px; /* Espaço entre o botão e o card */
+    display: flex;
+    justify-content: flex-start;
 }
 
 .btn-back-agd button {
