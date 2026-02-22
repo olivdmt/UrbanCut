@@ -11,6 +11,17 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Para o express entender JSON no corpo das requisições
 
+//Rota de ping
+app.get("/db-test", async (req, res) => {
+  try {
+    const result = await knex.raw("select 1 as ok");
+    res.json({ ok: true, result: result.rows ? result.rows : result });
+  } catch (err) {
+    console.error("DB TEST ERROR:", err);
+    res.status(500).json({ ok: false, error: err.message, code: err.code });
+  }
+});
+
 // Rota para LISTAR todos os agendamentos do banco
 app.get("/agendamentos", async (req, res) => {
   try {
