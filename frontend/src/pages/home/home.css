@@ -113,12 +113,17 @@ body, html {
 
 .hero-slider  {
   background-color: rgba(20, 20, 20, 0.519);
-  padding: 40px;
+  padding: 30px;
   transition: all ease 0.8s;  
   margin-top: 30px;
   border: 1px solid rgba(153, 153, 152, 0.13);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
+
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  min-height: 400px;
 }
 
 .hero-slider:hover {
@@ -133,11 +138,12 @@ body, html {
 
 .hero-slider h4 {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1.3em;
-  white-space: nowrap;
+  font-size: 1.2em;
   font-weight: bold;
-  margin-bottom: 10px;
+  /* white-space: nowrap; */
+  margin-bottom: 15px;
   text-align: start;
+  min-height: 3em;
 }
 
 .hero-slider img {
@@ -150,8 +156,9 @@ body, html {
   align-items: center;
   gap: 20px;
   width: 100%;
-  flex-wrap: nowrap;
   background-color: transparent;
+  margin-top: auto;
+  /* flex-wrap: nowrap; */
 }
 
 .hero-slider span {
