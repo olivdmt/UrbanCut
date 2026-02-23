@@ -98,6 +98,7 @@ p {
     gap: 20px; /* Define o espaçamento entre os elementos */
 }
 
+
 .forms-group label {
     color: #fff;
     font-weight: 400;
@@ -109,37 +110,64 @@ p {
     color: var(--highlight);
 }
 
-
-.forms-group input {
+/* Estado padrão do campo (igual ao seu input de email) */
+.wrapper-password {
+    display: flex;
+    align-items: center;
     background-color: rgba(80, 80, 80, 0.196);
     border: 1px solid rgba(147, 145, 145, 0.249);
-    padding: 15px;
+    padding: 15px; /* Mesmo padding que você usaria no input de email */
     border-radius: 5px;
-    color: var(--alternative-text);
-    outline: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
 }
 
-.forms-group input:hover,
-.forms-group input::selection {
+/* Quando o mouse passa por cima (Hover) */
+.wrapper-password:hover {
     border: 1px solid var(--highlight);
+}
+
+/* O "PULO DO GATO": Quando o input lá dentro recebe foco (clique) */
+.wrapper-password:focus-within {
+    border: 1px solid var(--blue-color); /* Cor de foco que você definiu */
     background-color: transparent;
 }
 
-.forms-group input:focus,
-.forms-group input:checked {
-    border: 1px solid var(--blue-color);
-    background:transparent;
+/* Ajuste do input interno para não ter estilo próprio */
+.wrapper-password input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--alternative-text);
+    width: 100%;
+    flex: 1; /* Faz o input ocupar o espaço e empurrar o olho pro fim */
+    padding: 0; /* Remove padding interno para não somar com o da div */
 }
 
-
-input::-ms-reveal {
-    cursor: pointer;
-    /* filter: invert(0.5) sepia(1) saturate(5) hue-rotate(10deg);  */
-    filter: invert(100%); 
-    /* O filtro acima tenta chegar próximo ao laranja/dourado */
+/* Corrigindo a seleção de texto (aquela cor azul ao selecionar) */
+.wrapper-password input::selection, 
+.forms-group input::selection {
+    background-color: var(--blue-color);
+    color: #000;
+}
+input::-ms-reveal,
+input::-ms-clear {
+    display: none; 
 }
 
-.admin button {
+/* Para alguns navegadores baseados em Webkit que possam tentar 
+   colocar ícones de preenchimento automático/visualização */
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+.login {
     background: var(--btn);
     border: none;
     padding: 10px;
@@ -157,12 +185,38 @@ input::-ms-reveal {
     margin-top: 10px;
 }
 
-.admin button:hover {
+.login:hover {
     transform: translateY(-10px);
     background: rgb(0, 255, 251);
     cursor: pointer;
     color: #fff;
     box-shadow: 0 5px 15px rgba(255, 145, 0, 0.419);
+}
+
+.eyePassword {
+    width: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--highlight);
+
+}
+
+/* Efeito de vidro no cartão do alerta */
+.my-glass-popup {
+  backdrop-filter: blur(30px); /* O desfoque propriamente dito */
+  -webkit-backdrop-filter: blur(30px); /* Suporte para Safari */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borda fina para parecer vidro */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.211);
+}
+
+/* Efeito de desfoque no fundo da tela inteira (opcional) */
+.my-glass-backdrop {
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.252) !important;
 }
 
 /* --- RESPONSIVIDADE --- */
@@ -185,7 +239,7 @@ input::-ms-reveal {
         /* margin-bottom: 30px; */
     }
 
-    .admin button {
+    .login button {
         width: 100%;
     }
 
@@ -201,10 +255,6 @@ input::-ms-reveal {
         gap: 10px; /* Reduz espaçamento entre label e input */
     }
 
-    .admin button {
-        width: 100%; /* Botão de confirmar ocupa toda a largura */
-        padding: 15px;
-    }
 }
 
 /* Ajuste fino para celulares muito pequenos */

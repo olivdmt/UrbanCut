@@ -8,6 +8,9 @@ function Admin() {
   // Hook para redirecionar o usuário após o login
   const navigate = useNavigate();
 
+  //Estado que vai exibir ou não os valores no campo senha
+  const [showPassword, setShowPassword] = useState(false);
+
   // Estado que armazena os valores dos campos do formulário em um objeto
   const [formData, setFormData] = useState({
     email: "",
@@ -30,11 +33,15 @@ function Admin() {
     Swal.fire({
       title: "Aguarde!",
       text: "Estamos realizando a conexão...",
-      background: "#1d1d1d",
+      background: "rgba(29, 29, 29, 0.6)",
       color: "#fff",
       allowOutsideClick: false, // Impede fechar cliclando fora
       allowEscapeKey: false, // Impede fechar com o teclado
       showConfirmButton: false,
+      customClass: {
+        popup: 'my-glass-popup',
+        backdrop: 'my-glass-backdrop'
+      },
       didOpen: () => {
         Swal.showLoading(); // Adiciona o ícone de carregamento giratório
       }
@@ -134,17 +141,26 @@ function Admin() {
             <i className="fa-solid fa-lock">
               <label htmlFor="password">Senha</label>
             </i>
+          </div>
+
+          <div className="wrapper-password">
             <input
               id="password" // O ID deve ser igual à chave no estado (password)
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
               placeholder="Digite sua senha"
               required
             />
+            <button 
+              className="eyePassword"
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}>
+              <i className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
+            </button>
           </div>
 
-          <button type="submit">ENTRAR</button>
+          <button className="login" type="submit">ENTRAR</button>
         </form>
       </section>
     </div>
