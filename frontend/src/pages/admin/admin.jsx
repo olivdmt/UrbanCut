@@ -26,6 +26,20 @@ function Admin() {
   async function handleSubmit(e) {
     e.preventDefault(); // Impede o recarregamento padrão da página
 
+    // Cria um Pop-up de carregamento para que o usuário não fique perdido
+    Swal.fire({
+      title: "Aguarde!",
+      text: "Estamos realizando a conexão...",
+      background: "#1d1d1d",
+      color: "#fff",
+      allowOutsideClick: false, // Impede fechar cliclando fora
+      allowEscapeKey: false, // Impede fechar com o teclado
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading(); // Adiciona o ícone de carregamento giratório
+      }
+    });
+    
     try {
       // Faz a chamada para a API no backend
       const res = await fetch(`${API}/admin/login`, {
