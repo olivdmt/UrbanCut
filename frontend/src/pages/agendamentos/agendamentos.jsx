@@ -26,6 +26,24 @@ function Agendamentos() {
         e.preventDefault(); // Impede o carregamento da padráo da página
         setLoading(true); // Bloqueia o botão
 
+        //Cria um pop up de carregamento enquanto o JSON de agendamento é enviado ao  banco de dados
+        Swal.fire({
+            title: 'Aguarde!',
+            text: 'Estamos organizando seu agendamento...',
+            background: 'rgba(29, 29, 29, 0.6)',
+            color: '#fff',
+            allowOutsideClick: false, // Impede de fechar clicando fora
+            allowEscapeKey: false, // Impede de fechar com o teclado
+            showConfirmButton: false,
+            customClass: {
+                popup: 'my-glass-popup',
+                backdrop: 'my-class-backdrop'
+            },
+            didOpen: () => {
+                Swal.showLoading(); // Adiciona o ícone de carregamento giratório
+            }
+        })
+
         try {
             // Faz a chamada para a API na rota "/agendamentos" no backend
             const res = await fetch(`${API}/agendamentos`, {
