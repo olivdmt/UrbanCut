@@ -417,7 +417,7 @@ function DashboardAdmin() {
 
                 <section className="header">
                     <h1>Painel Administrativo</h1>
-                    <p>Bem vindo, {data.admin.name}</p>
+                    <p>Bem vindo, Admin</p>
                 </section>
 
                 {/* Seção de Filtros (Busca) */}
