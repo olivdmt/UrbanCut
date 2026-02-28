@@ -28,6 +28,7 @@ function DashboardAdmin() {
             background: '#1d1d1d',
             color: '#fff',
             showCancelButton: true, 
+            cancelButtonColor: "rgb(0, 255, 251)",
             confirmButtonText: "Sair",
             cancelButtonText: "Cancelar",
             confirmButtonColor: "#e53935",
@@ -81,10 +82,47 @@ function DashboardAdmin() {
     }
 
     // Precisa ainda criar um botão para esta função!!!
-    const limparFiltros = () => {
-        setFormData({ data: "", cliente: ""});
-        setAgendamentosFiltrados(agendamentos);
-    };
+    // const limparFiltros = () => {
+    //     setFormData({ data: "", cliente: ""});
+    //     setAgendamentosFiltrados(agendamentos);
+    // };
+
+    // Função responsável pela criação de um agendamento pela tela Administrativa
+    async function createAppointments() {
+        // Faz a requisição na API pela rota agendamentos usando o metódo POST
+        const res = await fetch(`${API}/agendamentos`, {
+            method: "POST"
+        });
+
+        // Transforma o dados da requisição em objeto JSON
+        const data = await res.json();
+
+        const { value: formValues} = await Swal.fire({
+            title: 'Deseja criar um novo agendamento?',
+            background: '#1d1d1d',
+            color: '#fff',
+            customClass: {
+                poup: 'swal-edit-modal',
+            },
+            html: `
+                <style>
+                    .swal-custom-select option {
+                        backgroud-color: #1d1d1d;
+                        color: #fff;
+                    }
+                    
+                    select.swal-custom-select:focus {
+                        border-color: #7066e0;
+                    }
+                </style>
+                <div style="display:flex; flex-direction: column; gap 10px; text-align: left;">
+                    <label>Nome Completo</label
+                    `,
+        });
+
+        
+        
+    }
 
     // Função assíncrona para editar (espera a resposta do SweetAlert)
     const handleEdit = async (agendamento) => {
