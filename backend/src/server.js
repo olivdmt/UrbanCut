@@ -171,10 +171,6 @@ app.post("/admin/login", async (req, res) => {
 });
 
 
-/* =======================================
- --- > ROTAS DE CADASTRO DE USUÁRIO < ----
-==========================================*/
-
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em ${PORT}`);

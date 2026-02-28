@@ -116,6 +116,78 @@ function Agendamentos() {
         }
     }
 
+    // Função que irá que buscar os dias e os horários agendados e válidar se aquele horario está livre
+    async function freeTime(e) {
+        e.preventDefault();
+        // Faz a requisição na API com o metódo GET
+        const res = await fetch(`${API}/agendamentos`, {
+            method: "GET"
+        });
+
+        // Formata os dados recebido em objeto Json
+        const data = await res.json();
+
+        // Busca o elemento horario e data pelo ID  e filtra os valores
+        let time = formData.horario;
+        let day = formData.data;
+
+        // Filtra os valores selecionados nos campos de Data e Hora        const diaSelecionado = day;
+        const diaSelecionado = day;
+        const horaSelecionada = time;
+
+        //Função para percorre todo o array de objetos
+        // O same.() percorre o array todo e item representa cada objeto dentro do array
+        // E some() retorna true se pelomenos um item satisfazer a condição e false se nenhum satisfazer
+        // Em outras palavras "Tem um agendamento neste mesmo dia no mesmo horário?"
+        const agendado = data.some(item => {
+            // Filtra a data de (2026-02-28T00:00:00.000Z) para ("2026-02-28", "00:00:00.000Z")
+            // E seleciona somente o primeiro índice
+            const daiDoItem = item.data.split("T")[0]; //
+            // Filtra o horário para futura verificação (ex: 09:00) removendo o "H"
+            const horaDoItem = item.horario.replace("h", "");
+
+            // Padroniza o valor digitado no input para verificar com o banco de dados
+            const horaInput = horaSelecionada.replace("h", "");
+
+            /* 
+                A data do banco é igual a data selecionda? É
+                O horário do banco é igual o horário selecionado? É
+                Se as duas forem verdadeiras retorna True
+            */
+            return daiDoItem === diaSelecionado && horaDoItem === horaInput;
+        }); 
+
+        if (agendado) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end", // Canto superior direito
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                // Estilização
+                background: "#1d1d1d",
+                color: "#fff",
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseLeave', Swal.resumeTimer)
+                }
+            })
+                
+            Toast.fire({
+                icon: "error",
+                title: `Este horário não está disponível ${formData.nome}!`,
+                text: `Por favor, tente outro horario ${formData.data} as ${formData.horario}!`,
+                customClass: {
+                    popup: 'my-custom-toast',
+                    title: 'my-custom-title'
+                }
+            });
+            return;
+        }
+        handleSubmit(e);
+    }
+    
+
     //Função para atualizar o estado conforme o usuário digita
     const handleChange = (e) => {
         const { id, value, name } = e.target;
@@ -160,7 +232,7 @@ function Agendamentos() {
                     <h1>Agendar Horário</h1>
                     <p>Preencha os dados abaixo para realizar seu agendamento</p>
                 </div>
-                <form className="form" onSubmit={handleSubmit}>
+                <form className="form" onSubmit={freeTime}>
                     <div className="input-group-primary">
                         <div className="forms-group">
                             <i className="fa-solid fa-clipboard-user"><label htmlFor="nome">Nome Completo</label></i>
