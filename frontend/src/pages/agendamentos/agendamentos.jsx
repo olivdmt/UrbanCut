@@ -8,6 +8,13 @@ import '../agendamentos/agendamento.css';
 function Agendamentos() {
 
     const navigate = useNavigate(); // Inicializa a função de navegação
+    // ARRAY para de objetos para armazenar os serviços
+    const SERVICOS = [
+        { value: "corte", label: "Corte Masculino - R$ 30" },
+        { value: "barba", label: "Barba - R$ 12" },
+        { value: "corte_barba", label: "Corte + Barba - R$ 42" },
+        { value: "sobrancelha", label: "Sobrancelha - R$ 15" },
+    ]
     // Array para armazenar os Horários
     const HORARIOS = ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00"];
     const [horariosDisponiveis, setHorariosDisponiveis] = useState(HORARIOS);
@@ -146,10 +153,10 @@ function Agendamentos() {
             // E seleciona somente o primeiro índice
             const daiDoItem = item.data.split("T")[0]; //
             // Filtra o horário para futura verificação (ex: 09:00) removendo o "H"
-            const horaDoItem = item.horario.replace("h", "");
+            const horaDoItem = String(item.horario).slice(0,5);
 
             // Padroniza o valor digitado no input para verificar com o banco de dados
-            const horaInput = horaSelecionada.replace("h", "");
+            const horaInput = String(horaSelecionada).slice(0,5);
             /* 
                 A data do banco é igual a data selecionda? É
                 O horário do banco é igual o horário selecionado? É
@@ -298,10 +305,10 @@ function Agendamentos() {
                             required
                         >
                             <option value="">Selecione um serviço</option>
-                            <option value="corte">Corte Maculino - R$ 30</option>
-                            <option value="barba">Barba - R$ 12</option>
-                            <option value="sobrancelha">Sobrancelha - R$ 20</option>
-                            <option value="combo">Corte + Barba - R$ 40</option>
+
+                            {SERVICOS.map((s) => (
+                                <option key={s.value} value={s.label}>{s.label}</option>
+                            ))}
                         </select>
                     </div>
 
@@ -324,7 +331,7 @@ function Agendamentos() {
                                 required
                             >
                                 <option value="">Selecione um Horario</option>
-                                {horariosDisponiveis.map(h => (<option key={h} value={h}>{h}h</option>))}
+                                {horariosDisponiveis.map(h => (<option key={h} value={h}>{h}</option>))}
                                 {/* <option value="">Selecione um horário</option>
                                 <option value="09:00">09:00h</option>
                                 <option value="10:00">10:00h</option>

@@ -89,23 +89,27 @@ function DashboardAdmin() {
     // Função assíncrona para editar (espera a resposta do SweetAlert)
     const handleEdit = async (agendamento) => {
         const SERVICOS = [
-            "Corte Masculino - R$ 30",
-            "Barba - R$ 12",
-            "Corte + Barba - R$ 40",
-            "Sobrancelha - R$ 20",
-        ];
+            { value: "corte", label: "Corte Masculino - R$ 30" },
+            { value: "barba", label: "Barba - R$ 12" },
+            { value: "corte_barba", label: "Corte + Barba - R$ 42" },
+            { value: "sobrancelha", label: "Sobrancelha - R$ 15" },
+        ]
+
+        const servicoBanco = String(agendamento.servico || "").trim();
 
         const HORARIOS = [
-            "09:00h", "10:00h", "11:00h", "12:00h",
-            "13:00h", "14:00h", "15:00h", "16:00h",
-            "17:00h", "18:00h", "19:00h",
+            "09:00", "10:00", "11:00", "12:00",
+            "13:00", "14:00", "15:00", "16:00",
+            "17:00", "18:00", "19:00",
         ];
+
+        const horarioBanco = String(agendamento.horario || "").slice(0,5).trim();
         
         const servicoOptions = SERVICOS.map((s) =>
-            `<option value="${s}" ${agendamento.servico === s ? "selected" : ""}>${s}</option>`).join("");
+            `<option value="${s.label}" ${servicoBanco === s.label ? "selected" : ""}>${s.label}</option>`).join("");
         
         const horarioOptions = HORARIOS.map((h) =>
-            `<option value="${h}" ${agendamento.horario === h ? "selected" : ""}>${h}</option>`).join("")
+            `<option value="${h}" ${horarioBanco === h ? "selected" : ""}>${h}</option>`).join("")
         
         const { value: formValues} = await Swal.fire({
             title: 'Editar Agendamentos',
@@ -415,6 +419,7 @@ function DashboardAdmin() {
                                     <th><i className="fa-solid fa-calendar"></i> Data</th>
                                     <th><i className="fa-solid fa-clock"></i> Horario</th>
                                     <th><i className="fa-solid fa-user"></i> Cliente</th>
+                                    <th><i className="fa-solid fa-scissors"></i> Serviço</th>
                                     <th><i className="fa-solid fa-phone"></i> Telefone</th>
                                     <th>Status</th>
                                     <th>Ações</th>
@@ -424,7 +429,7 @@ function DashboardAdmin() {
                             <tbody>
                                 {agendamentosFiltrados.length === 0 ? (
                                     <tr>
-                                        <td colSpan="7" style={{ textAlign: "center", padding: "20px" }}>
+                                        <td colSpan="8" style={{ textAlign: "center", padding: "20px" }}>
                                             Não há agendamentos para exibir
                                         </td>
                                     </tr>
@@ -435,6 +440,7 @@ function DashboardAdmin() {
                                             <td>{new Date(item.data).toLocaleDateString('pt-BR', { timeZone: 'UTC'})}</td>
                                             <td>{item.horario}</td>
                                             <td>{item.nome}</td>
+                                            <td>{item.servico}</td>
                                             <td>{item.telefone}</td>
                                             <td>
                                                 <span className={`status-badge ${item.status.toLowerCase()}`}>
