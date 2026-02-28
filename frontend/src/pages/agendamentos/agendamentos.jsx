@@ -8,7 +8,9 @@ import '../agendamentos/agendamento.css';
 function Agendamentos() {
 
     const navigate = useNavigate(); // Inicializa a função de navegação
-
+    // Array para armazenar os Horários
+    const HORARIOS = ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00"];
+    const [horariosDisponiveis, setHorariosDisponiveis] = useState(HORARIOS);
     /// Inicializa o estado para carregamento
     const [loading, setLoading] = useState(false);
     
@@ -148,7 +150,6 @@ function Agendamentos() {
 
             // Padroniza o valor digitado no input para verificar com o banco de dados
             const horaInput = horaSelecionada.replace("h", "");
-
             /* 
                 A data do banco é igual a data selecionda? É
                 O horário do banco é igual o horário selecionado? É
@@ -157,12 +158,12 @@ function Agendamentos() {
             return daiDoItem === diaSelecionado && horaDoItem === horaInput;
         }); 
 
-        if (agendado) {
+        if (agendado) {            
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end", // Canto superior direito
                 showConfirmButton: false,
-                timer: 2000,
+                timer: 3000,
                 timerProgressBar: true,
                 // Estilização
                 background: "#1d1d1d",
@@ -185,6 +186,36 @@ function Agendamentos() {
             return;
         }
         handleSubmit(e);
+    }
+
+    // Função responsável por inibir so horários já agendados no banco de dados
+    async function onChangeData(e) {
+        // Captura o valor da data selcionada no input
+        const dataEscolhida = e.target.value;
+
+        // Atualiza o estado do formulário mantendo os dados anteriores e alterando apenas a data
+        setFormData(prev => ({  ...prev, data: dataEscolhida }));
+
+        // Busca todos os agendamentos existentes na API (Endpoint: /agendamentos)
+        const res = await fetch(`${API}/agendamentos`, {
+            method: "GET",
+        });
+
+        // Converte os dados recebidos do banco de dados em objeto JSON
+        const agendamentos = await res.json();
+
+        //Filtra os agendamentos que correspondem á data escolhidoa
+        const horariosOcupado = agendamentos.filter(a => a.data.split("T")[0] === dataEscolhida).map(a => a.horario.replace("h", ""));
+
+        // Compara a lista global de HORARIOS com os ocupados para encontrar os vagos
+        const livres = HORARIOS.filter(h => !horariosOcupado.includes(h));
+
+        // Atualiza o estado que controla a exibição od horários disponíveis na interface
+        setHorariosDisponiveis(livres);
+
+        // Verificaçãi de consistência:
+        // Se o usuário já tinha um horário selecionado e ele NÃO está mais disponivel na nova data, limpa o campo
+        setFormData(prev => (livres.includes(prev.horario) ? prev : { ...prev, horario : ""}));    
     }
     
 
@@ -281,7 +312,7 @@ function Agendamentos() {
                                 type="date"
                                 id="data"
                                 value={formData.data}
-                                onChange={handleChange}
+                                onChange={onChangeData}
                             />
                         </div>
                         <div className="forms-group">
@@ -290,8 +321,11 @@ function Agendamentos() {
                                 value={formData.horario}
                                 id="horario"
                                 onChange={handleChange}
+                                required
                             >
-                                <option value="">Selecione um horário</option>
+                                <option value="">Selecione um Horario</option>
+                                {horariosDisponiveis.map(h => (<option key={h} value={h}>{h}h</option>))}
+                                {/* <option value="">Selecione um horário</option>
                                 <option value="09:00">09:00h</option>
                                 <option value="10:00">10:00h</option>
                                 <option value="11:00">11:00h</option>
@@ -301,7 +335,7 @@ function Agendamentos() {
                                 <option value="16:00">16:00h</option>
                                 <option value="17:00">17:00h</option>
                                 <option value="18:00">18:00h</option>
-                                <option value="19:00">19:00h</option>
+                                <option value="19:00">19:00h</option> */}
                             </select>
                         </div>
                     </div>
