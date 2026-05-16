@@ -38,7 +38,7 @@ function requireAdmin(req, res, next) {
  --- > ROTAS DE AGENDAMENTO < ----
 ==================================*/
 
-// Rota de ping
+// Rota de ping para testar a saúde do banco
 app.get("/db-test", async (req, res) => {
   try {
     const result = await knex.raw("select 1 as ok");
@@ -125,7 +125,7 @@ app.delete('/agendamentos/:id', async (req, res) => {
  --- > ROTAS ADMINISTRATIVAS < ---
 ==================================*/
 
-// Lista os agendamentos na visão do administrador
+// Lista os agendamentos na visão do administrador (Protegida)
 app.get("/admin/agendamentos", requireAdmin, async (req, res) => {
   try {
     const agendamentos = await knex("agendamentos").select("*");
@@ -170,14 +170,48 @@ app.post("/admin/login", async (req, res) => {
 ==================================*/
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, async () => {
-    console.log(`Servidor rodando em ${PORT}`);
+  console.log(`Servidor rodando em ${PORT}`);
 
-    // Executa a criação do admin automaticamente ao iniciar o servidor
-    try {
-        console.log("Iniciando verificação de administrador...");
-        const { main: createAdminMain } = require("./createAdmin");
-        await createAdminMain();
-    } catch (error) {
-        console.error("Erro ao rodar o script de admin automático:", error.message);
+  try {
+    console.log("Validando a estrutura do banco de dados...");
+
+    // 1. Cria a tabela 'admins' caso ela não exista
+    const hasAdminsTable = await knex.schema.hasTable("admins");
+    if (!hasAdminsTable) {
+      await knex.schema.createTable("admins", (table) => {
+        table.increments("id").primary();
+        table.string("name", 255).notNullable();
+        table.string("email", 255).notNullable().unique();
+        table.string("password_hash", 255).notNullable();
+      });
+      console.log("✅ Tabela 'admins' verificada/criada com sucesso!");
+    } else {
+      console.log("ℹ️ Tabela 'admins' já existe.");
     }
+
+    // 2. Cria a tabela 'agendamentos' caso ela não exista
+    const hasAgendamentosTable = await knex.schema.hasTable("agendamentos");
+    if (!hasAgendamentosTable) {
+      await knex.schema.createTable("agendamentos", (table) => {
+        table.increments("id").primary();
+        table.string("nome", 255).notNullable();
+        table.string("telefone", 50);
+        table.string("servico", 255);
+        table.string("data", 50);
+        table.string("horario", 50);
+        table.string("status", 50).defaultTo("pendente");
+      });
+      console.log("✅ Tabela 'agendamentos' verificada/criada com sucesso!");
+    } else {
+      console.log("ℹ️ Tabela 'agendamentos' já existe.");
+    }
+
+    // 3. Executa a criação do admin automático após garantir as tabelas
+    console.log("Iniciando verificação de administrador...");
+    const { main: createAdminMain } = require("./createAdmin");
+    await createAdminMain();
+
+  } catch (error) {
+    console.error("❌ ERRO CRÍTICO NA INICIALIZAÇÃO DO BANCO:", error.message);
+  }
 });
