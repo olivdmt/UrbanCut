@@ -1,12 +1,5 @@
 const bcrypt = require("bcrypt");
-const { Pool } = require("pg");
-require("dotenv").config();
-
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-});
+const db = require("./database"); // Importa a mesma conexão do Knex
 
 async function main() {
   const name = process.env.ADMIN_NAME;
@@ -14,30 +7,34 @@ async function main() {
   const password = process.env.ADMIN_PASSWORD;
 
   if (!name || !email || !password) {
-    throw new Error("Defina ADMIN_NAME, ADMIN_EMAIL, ADMIN_PASSWORD no .env");
+    throw new Error("Defina ADMIN_NAME, ADMIN_EMAIL, ADMIN_PASSWORD nas variáveis de ambiente");
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  // Verifica se o admin já existe usando o Knex
+  const existingAdmin = await db("admins").where({ email }).first();
 
-  await pool.query(
-    `INSERT INTO admins (name, email, password_hash)
-     VALUES ($1, $2, $3)
-     ON CONFLICT (email) DO NOTHING`,
-    [name, email, passwordHash]
-  );
-
-  console.log("Admin criado (ou já existente).");
-  await pool.end();
-  // process.exit(0);
+  if (!existingAdmin) {
+    const passwordHash = await bcrypt.hash(password, 12);
+    
+    // Insere o admin usando o Knex
+    await db("admins").insert({
+      name,
+      email,
+      password_hash: passwordHash
+    });
+    console.log("🚀 Admin criado com sucesso via Knex!");
+  } else {
+    console.log(" Admin já existente no banco de dados.");
+  }
 }
 
-// Exporta a função para o server.js conseguir usar
 module.exports = { main };
 
-// Mantém a execução automática caso você rode localmente via terminal
 if (require.main === module) {
-  main().catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+  main()
+    .then(() => process.exit(0))
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    });
 }
