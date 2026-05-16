@@ -7,7 +7,7 @@ const db = knexLib({
   client: "pg",
   connection: {
     connectionString: process.env.DATABASE_URL,
-    ssl: isProd ? { rejectUnauthorized: false } : false,
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
   },
   pool: { min: 0, max: 10 },
 });
