@@ -28,7 +28,7 @@ async function main() {
 
   console.log("Admin criado (ou já existente).");
   await pool.end();
-  process.exit(0);
+  // process.exit(0);
 }
 
 // Exporta a função para o server.js conseguir usar
