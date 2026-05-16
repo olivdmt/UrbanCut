@@ -332,17 +332,7 @@ function Agendamentos() {
                             >
                                 <option value="">Selecione um Horario</option>
                                 {horariosDisponiveis.map(h => (<option key={h} value={h}>{h}</option>))}
-                                {/* <option value="">Selecione um horário</option>
-                                <option value="09:00">09:00h</option>
-                                <option value="10:00">10:00h</option>
-                                <option value="11:00">11:00h</option>
-                                <option value="12:00">12:00h</option>
-                                <option value="14:00">14:00h</option>
-                                <option value="15:00">15:00h</option>
-                                <option value="16:00">16:00h</option>
-                                <option value="17:00">17:00h</option>
-                                <option value="18:00">18:00h</option>
-                                <option value="19:00">19:00h</option> */}
+                               
                             </select>
                         </div>
                     </div>

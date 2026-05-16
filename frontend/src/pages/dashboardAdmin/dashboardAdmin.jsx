@@ -20,8 +20,7 @@ function DashboardAdmin() {
             { value: "sobrancelha", label: "Sobrancelha - R$ 15" },
         ]
 
-    const navigate = useNavigate(); // Inicializa a função de navegação
-    // --- ESTADOS (STATES) ---
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         showAppointments();
