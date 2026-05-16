@@ -7,6 +7,19 @@ import '../dashboardAdmin/dashboardAdmin.css'
 
 function DashboardAdmin() {
 
+        const HORARIOS = [
+            "09:00", "10:00", "11:00", "12:00",
+            "13:00", "14:00", "15:00", "16:00",
+            "17:00", "18:00", "19:00",
+        ];
+
+        const SERVICOS = [
+            { value: "corte", label: "Corte Masculino - R$ 30" },
+            { value: "barba", label: "Barba - R$ 12" },
+            { value: "corte_barba", label: "Corte + Barba - R$ 42" },
+            { value: "sobrancelha", label: "Sobrancelha - R$ 15" },
+        ]
+
     const navigate = useNavigate(); // Inicializa a função de navegação
     // --- ESTADOS (STATES) ---
 
@@ -88,14 +101,10 @@ function DashboardAdmin() {
     // };
 
     // Função responsável pela criação de um agendamento pela tela Administrativa
-    async function createAppointments() {
-        // Faz a requisição na API pela rota agendamentos usando o metódo POST
-        const res = await fetch(`${API}/agendamentos`, {
-            method: "POST"
-        });
+    const createAppointments = async () => {
 
-        // Transforma o dados da requisição em objeto JSON
-        const data = await res.json();
+        const servicoOptions = SERVICOS.map((s) => 
+        `<option value="${s.label}" ${SERVICOS == s.label ? "selected" : ""}>${s.label}</option>`).join();
 
         const { value: formValues} = await Swal.fire({
             title: 'Deseja criar um novo agendamento?',
@@ -116,30 +125,42 @@ function DashboardAdmin() {
                     }
                 </style>
                 <div style="display:flex; flex-direction: column; gap 10px; text-align: left;">
-                    <label>Nome Completo</label
+                    <label>Nome Completo</label>
+                    <input id="swal-nome" class="swal2-input" style="margin: 0; width: 100%;">
+
+                    <label>Serviço</label>
+                    <select
+                        id="swal-servico"
+                        class="swal2-input"
+                        style="margin: 0; width: 100%; background: #1d1d1d; color: #fff;"
+                    >
+                        ${servicoOptions}
+                    </select>
                     `,
+            focusConfirm:  false,
+            showCancelButton: true,
+            confirmButtonText: 'Salvar Agendamento',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#ff4d4d'
         });
 
-        
-        
+
+        // Faz a requisição na API pela rota agendamentos usando o metódo POST
+        const res = await fetch(`${API}/agendamentos`, {
+            method: "POST",
+            body: JSON.stringify(formValues)
+        });
+
+        // Transforma o dados da requisição em objeto JSON
+        const data = await res.json();
     }
 
     // Função assíncrona para editar (espera a resposta do SweetAlert)
     const handleEdit = async (agendamento) => {
-        const SERVICOS = [
-            { value: "corte", label: "Corte Masculino - R$ 30" },
-            { value: "barba", label: "Barba - R$ 12" },
-            { value: "corte_barba", label: "Corte + Barba - R$ 42" },
-            { value: "sobrancelha", label: "Sobrancelha - R$ 15" },
-        ]
 
         const servicoBanco = String(agendamento.servico || "").trim();
 
-        const HORARIOS = [
-            "09:00", "10:00", "11:00", "12:00",
-            "13:00", "14:00", "15:00", "16:00",
-            "17:00", "18:00", "19:00",
-        ];
 
         const horarioBanco = String(agendamento.horario || "").slice(0,5).trim();
         
@@ -442,7 +463,8 @@ function DashboardAdmin() {
                         </div>
                         
                         <div className="filter-groups">
-                            <button type="button" onClick={aplicarFiltros}>APLICAR FILTROS</button>
+                            <button className="createAppoitments" type="button" onClick={createAppointments}>NOVO AGENDAMENTO</button>
+                            <button className="applyFilter" type="button" onClick={aplicarFiltros}>APLICAR FILTROS</button>
                         </div>
                     </form>
                 </section>

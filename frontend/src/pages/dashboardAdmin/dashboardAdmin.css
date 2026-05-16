@@ -140,7 +140,7 @@
 }
 
 
-.filter-groups button {
+.applyFilter {
     background: transparent;
     border: 1px solid rgba(255, 0, 0, 0.3);
     color: #ff4d4d;
@@ -150,9 +150,24 @@
     transition: 0.3s;
 }
 
-.filter-groups button:hover {
+.applyFilter:hover {
     background: #ff4d4d;
     color: #fff;
+}
+
+.createAppoitments {
+    background: transparent;
+    border: 1px solid rgb(0, 255, 251);
+    color: aquamarine;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.createAppoitments:hover {
+    background: rgb(0, 255, 251);
+    color: #000;
 }
 
 .btn-back-dash {

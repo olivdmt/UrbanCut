@@ -172,6 +172,15 @@ app.post("/admin/login", async (req, res) => {
 
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Servidor rodando em ${PORT}`);
+
+    // Executa a criação do admin automaticamente ao iniciar o servidor
+    try {
+        console.log("Iniciando verificação de administrador...");
+        const { main: createAdminMain } = require("./createAdmin");
+        await createAdminMain();
+    } catch (error) {
+        console.error("Erro ao rodar o script de admin automático:", error.message);
+    }
 });

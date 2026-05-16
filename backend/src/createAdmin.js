@@ -31,7 +31,13 @@ async function main() {
   process.exit(0);
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+// Exporta a função para o server.js conseguir usar
+module.exports = { main };
+
+// Mantém a execução automática caso você rode localmente via terminal
+if (require.main === module) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
