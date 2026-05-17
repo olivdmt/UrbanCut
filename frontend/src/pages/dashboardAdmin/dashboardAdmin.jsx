@@ -17,8 +17,6 @@ function DashboardAdmin() {
         cliente: '',
     });
 
-    const [username, setUsername] = useState(null);
-
     const HORARIOS = [
         "09:00", "10:00", "11:00", "12:00",
         "13:00", "14:00", "15:00", "16:00",
@@ -69,17 +67,6 @@ function DashboardAdmin() {
         }
         showAppointments();
     }, []);
-
-    const getAdminUsername = async () => {
-        try {
-            const data = await getUsername();
-            // setUsername(data);
-            console.log(data);
-        } catch (error) {
-            console.error('Não foi possível buscar os adminitradores no banco.', error.message);
-        }
-
-    }
 
     // Função disparada ao clicar no botão "Sair"
     function logout() {
@@ -390,7 +377,7 @@ function DashboardAdmin() {
 
                 <section className="header">
                     <h1>Painel Administrativo</h1>
-                    <p>Bem vindo, {`${getAdminUsername()}`}</p>
+                    <p>Bem vindo, Admin</p>
                 </section>
 
                 {/* Seção de Filtros (Busca) */}
