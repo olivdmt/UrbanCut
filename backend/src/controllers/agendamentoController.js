@@ -1,4 +1,4 @@
-import agendamentos from "../models/agendamentos";
+import agendamentos from "../models/agendamentos.js";
 
 export const getOrder = async (req, res) => {
     try {
