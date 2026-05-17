@@ -26,11 +26,11 @@ export const createOrder = async (req, res) => {
 
 
         const newOrder = await agendamentos.create({
-            nome,
-            telefone,
-            servico,
-            data,
-            horario,
+            nome: nome,
+            telefone: telefone,
+            servico: servico,
+            data: data,
+            horario: horario,
         });
 
         res.status(201).json({
@@ -41,7 +41,7 @@ export const createOrder = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Não foi possível criar um novo pedido",
+            message: "Não foi possível criar um novo agendamento",
             error: error.message,
         });
     }
@@ -76,10 +76,11 @@ export const updateOrder = async (req, res) => {
         const {nome, telefone, servico, data, horario} = req.body;
         
         const editOrder =  agendamentos.update({
-            nomes, 
-            telefone, 
-            servico, data, 
-            horario
+            nome: nome, 
+            telefone: telefone, 
+            servico: servico,
+            data: data, 
+            horario: horario,
         }, {where : { id }, });
 
         res.status(200).json({
