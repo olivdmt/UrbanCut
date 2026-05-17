@@ -39,10 +39,32 @@ function DashboardAdmin() {
                 console.log('Agendamentos buscado com sucesso!');
             } catch (error) {
                 console.error('Não foi possível buscar agendamentos.', error.message);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end', // Canto superior direito
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    background: '#1d1d1d',
+                    color: '#fff',
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseLeave', Swal.resumeTimer)
+                    }
+                });
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Erro na busca',
+                    text: `Não foi possível encontrar agendamentos: ${error}`,
+                    customClass: {
+                        poup: 'my-custom-toast',
+                        title: 'my-custom-title'
+                    }
+                });
             }
             setAgendamentos(data);
+            setAgendamentosFiltrados(data);
         }
-
         showAppointments();
     }, []);
 
@@ -302,7 +324,7 @@ function DashboardAdmin() {
         }
     };
 
-    
+
     const handleDelete = (id, nome) => {
         Swal.fire({
             title: 'Tem certeza?',
@@ -319,28 +341,17 @@ function DashboardAdmin() {
             // Se o usuário confirmou a exclusão
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch(`${API}/agendamentos/${id}`, {
-                        method: 'DELETE'
+                    const data = await deleteAppointment(id, nome);
+                    const novaLista = agendamentos.filter(item => item.id !== id);
+                    setAgendamentosFiltrados(novaLista);
+                    Swal.fire({
+                        title: 'Deletado!',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        background: '#1d1d1d',
+                        color: '#fff'
                     });
-
-                    if (res.ok) {
-                        // Se o agendamento foi deletado. Atualiza o estado novamente 
-                        const novaLista = agendamentos.filter(item => item.id !== id);
-                        setAgendamentosFiltrados(novaLista);
-                        Swal.fire({
-                            title: 'Deletado!',
-                            icon: 'success',
-                            timer: 1500,
-                            showConfirmButton: false,
-                            background: '#1d1d1d',
-                            color: '#fff'
-                        });
-
-                    } else {
-                        // Caso o servidor responda mas com erro (ex: 400 ou 401)
-                        throw new Error("Erro ao deletar no servidor")
-                    }
-
                 } catch (error) {
                     console.error("Erro ao deletar: ", error)
                     Swal.fire({
@@ -350,64 +361,11 @@ function DashboardAdmin() {
                         timer: 1500,
                         background: '#1d1d1d',
                         color: '#fff'
-                    })
+                    });
                 }
-
             }
         });
     };
-
-    // Função que ira buscar as informações no backend
-    async function showAppointments(e) {
-        try {
-            // Faz a chamada na API    
-            const res = await fetch(`${API}/agendamentos`, {
-                method: "GET"
-            })
-            // Se houver error na busca pela API
-            if (!res.ok) {
-                throw new Error("Erro ao buscar dados")
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end', // Canto superior direito
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                    background: '#1d1d1d',
-                    color: '#fff',
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseLeave', Swal.resumeTimer)
-                    }
-                })
-
-
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Erro na busca',
-                    text: `Não foi possível encontrar agendamentos: ${error}`,
-                    customClass: {
-                        poup: 'my-custom-toast',
-                        title: 'my-custom-title'
-                    }
-                })
-            }
-
-            // Transforma os dados recebidos em JSON
-            const data = await res.json();
-
-            // Atualiza o estado 
-            setAgendamentos(data);
-            setAgendamentosFiltrados(data);
-
-        } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: `Erro de conexão: ${error}`,
-                text: "Não foi possível conectar ao servidor.",
-            });
-        }
-    }
 
     // --- RENDERIZAÇÃO (JSX) ---
     return (

@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Link para navegação via clique, useNavigate para via código
-import API from '../../services/api'
+import API from '../../services/api.js'
+import adminAuth from '../../services/adminAuth.js';
 import Swal from "sweetalert2"; // Biblioteca de alertas visuais
 import "../admin/admin.css";
 
+
 function Admin() {
-  // Hook para redirecionar o usuário após o login
   const navigate = useNavigate();
 
-  //Estado que vai exibir ou não os valores no campo senha
   const [showPassword, setShowPassword] = useState(false);
 
-  // Estado que armazena os valores dos campos do formulário em um objeto
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -48,37 +47,8 @@ function Admin() {
     });
     
     try {
-      // Faz a chamada para a API no backend
-      const res = await fetch(`${API}/admin/login`, {
-        method: "POST", // Método para envio de dados sensíveis
-        headers: {
-          "Content-Type": "application/json", // Indica que estamos enviando um JSON
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      // Converte a resposta do servidor para objeto JavaScript
-      const data = await res.json();
-
-      // Verifica se a resposta HTTP indica erro (ex: 401 ou 404)
-      if (!res.ok) {
-        Swal.fire({
-          icon: "error",
-          title: "Erro no login",
-          text: data.error || "Credenciais inválidas",
-          background: '#1d1d1d',
-          color: '#fff'
-        });
-        return; // Interrompe a execução aqui se houver erro
-      }
-
-      // Se deu certo, salva o Token JWT no navegador (localStorage)
-      // Isso serve para manter o usuário logado em outras páginas
-      localStorage.setItem("admin_token", data.token);
-
+      const data = await adminAuth(formData);
+      console.log('Admin authenticado com sucesso!', data);
       // Exibe alerta de sucesso
       Swal.fire({
         icon: "success",
@@ -89,11 +59,11 @@ function Admin() {
         background: '#1d1d1d',
         color: '#fff'
       });
-
       // Redireciona o administrador para a página de Dashboard
       navigate("/dashboard");
       
     } catch (err) {
+      console.error('Não foi possível authenticar usuário.', err.message);
       // Caso o servidor esteja offline ou ocorra erro de rede
       Swal.fire({
         icon: "error",
