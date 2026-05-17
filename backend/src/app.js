@@ -4,7 +4,18 @@ import cors from 'cors';
 import agendamentos from './routes/agendamentosRoute.js';
 import Admin from './routes/adminRoute.js';
 
+
 const app = express();
+
+app.use(cors({
+    origin: [
+        'https://urbancut-nkox.onrender.com', 
+        'http://localhost:5173'        
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -12,8 +23,7 @@ app.get("/", (req, res) => {
     message: "API Urbancut online",
   });
 });
-
-app.use(cors());
+;
 app.use(express.json());
 
 app.use('/agendamentos', agendamentos);
