@@ -23,7 +23,6 @@ const Admin = sequelize.define('Admin', {
     senha: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'password' 
     }
 },
 {
