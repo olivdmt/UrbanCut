@@ -1,5 +1,5 @@
-import Admin from '../models/admin.js'; // Garanta a importação correta do modelo
-import bcrypt from 'bcryptjs'; // <-- Deve ser idêntico ao usado no script (bcryptjs)
+import Admin from '../models/admin.js';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const loginAdmin = async (req, res) => {
