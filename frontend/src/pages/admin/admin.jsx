@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Link para navegação via clique, useNavigate para via código
 import API from '../../services/api.js'
-import {salvarToken, loginAdmin} from '../../services/adminAuth.js';
+import { salvarToken, loginAdmin } from '../../services/adminAuth.js';
 import Swal from "sweetalert2"; // Biblioteca de alertas visuais
 import "../admin/admin.css";
 
@@ -45,9 +45,13 @@ function Admin() {
         Swal.showLoading(); // Adiciona o ícone de carregamento giratório
       }
     });
-    
+
     try {
-      const data = await loginAdmin(formData);
+      const data = await loginAdmin({
+        email: formData.email,
+        senha: formData.password 
+      });
+      
       salvarToken(data.token);
       console.log('Admin authenticado com sucesso!', data);
       // Exibe alerta de sucesso
@@ -62,7 +66,7 @@ function Admin() {
       });
       // Redireciona o administrador para a página de Dashboard
       navigate("/dashboard");
-      
+
     } catch (err) {
       console.error('Não foi possível authenticar usuário.', err.message);
       // Caso o servidor esteja offline ou ocorra erro de rede
@@ -93,7 +97,7 @@ function Admin() {
 
         {/* Formulário chamando a função handleSubmit no envio */}
         <form className="form" onSubmit={handleSubmit}>
-          
+
           <div className="forms-group">
             <i className="fa-solid fa-clipboard-user">
               <label htmlFor="email">Email</label>
@@ -123,7 +127,7 @@ function Admin() {
               placeholder="Digite sua senha"
               required
             />
-            <button 
+            <button
               className="eyePassword"
               type="button"
               onClick={() => setShowPassword(!showPassword)}>
