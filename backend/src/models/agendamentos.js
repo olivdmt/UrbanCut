@@ -29,3 +29,5 @@ const Agendamento = sequelize.define('Agendamento', {
     }
 
 });
+
+export default Agendamento;
