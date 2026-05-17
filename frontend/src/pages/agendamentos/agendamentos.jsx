@@ -53,7 +53,7 @@ function Agendamentos() {
         try {
             // Envia nosso payload para a service
             const data = await createAppointment(formData);
-            console.log('Dados enviado com sucesso!');
+            console.log('Dados enviado com sucesso!',data);
             setFormData({
                 nome: "",
                 telefone: "",
@@ -165,7 +165,7 @@ function Agendamentos() {
 
     // Função responsável por inibir so horários já agendados no banco de dados
     async function onChangeData(e) {
-        // Captura o valor da data selcionada no input
+        // Captura o valor da data selecionada no input
         const dataEscolhida = e.target.value;
 
         // Atualiza o estado do formulário mantendo os dados anteriores e alterando apenas a data

@@ -17,13 +17,13 @@ export const getAppointment = async () => {
     return data.data || [];
 };
 
-export const createAppointment = async (agen) => {
-    const reponse = await fetch(`${API}/agendamentos`, {
+export const createAppointment = async (dados) => {
+    const reponse = await fetch(`${API}`, {
         method: 'POST',
         headers: {
             'Content-Type' : 'application/json'
         },
-        body: JSON.stringify(agen),
+        body: JSON.stringify(dados),
     });
 
     const data = await response.json();
@@ -49,13 +49,13 @@ export const deleteAppointment = async(id) => {
     return data;
 }
 
-export const updateAppointment = async(id, agen) => {
+export const updateAppointment = async(id, dados) => {
     const response = await fetch(`${API}/agendamentos/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type' : 'application/json',
         },
-        body: JSON.stringify(agen),
+        body: JSON.stringify(dados),
     });
 
     const data = await response.json();
