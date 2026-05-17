@@ -17,6 +17,9 @@ app.use(cors({
     credentials: true
 }));
 
+app.use(express.json());
+
+
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -24,7 +27,6 @@ app.get("/", (req, res) => {
   });
 });
 ;
-app.use(express.json());
 
 app.use('/agendamentos', agendamentos);
 app.use('/admin', Admin);
