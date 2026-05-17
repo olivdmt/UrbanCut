@@ -18,7 +18,7 @@ export const getAppointment = async () => {
 };
 
 export const createAppointment = async (dados) => {
-    const reponse = await fetch(`${API}`, {
+    const reponse = await fetch(`${API}/agendamentos`, {
         method: 'POST',
         headers: {
             'Content-Type' : 'application/json'

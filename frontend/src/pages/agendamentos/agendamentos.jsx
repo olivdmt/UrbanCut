@@ -53,7 +53,7 @@ function Agendamentos() {
         try {
             // Envia nosso payload para a service
             const data = await createAppointment(formData);
-            console.log('Dados enviado com sucesso!',data);
+            console.log('Dados enviado com sucesso!', data);
             setFormData({
                 nome: "",
                 telefone: "",
@@ -102,12 +102,8 @@ function Agendamentos() {
     async function freeTime(e) {
         e.preventDefault();
 
-        try {
-            const data = await getAppointment();
-            console.log('Agendamentos recebidos com sucesso:', data);
-        } catch (error) {
-            console.log('Não foi possível encontrar agendamentos.', error.message);
-        }
+        const data = await getAppointment();
+        console.log('Agendamentos recebidos com sucesso:', data);
 
         // Busca o elemento horario e data pelo ID  e filtra os valores
         let time = formData.horario;
@@ -171,12 +167,8 @@ function Agendamentos() {
         // Atualiza o estado do formulário mantendo os dados anteriores e alterando apenas a data
         setFormData(prev => ({ ...prev, data: dataEscolhida }));
 
-        try {
-            const agendamentos = await getAppointment();
-            console.log('Busca de agendamento concluida com sucesso!', data);
-        } catch (error) {
-            console.error('Não foi possível buscar agendamentos.', error.message);
-        }
+        const agendamentos = await getAppointment();
+        console.log('Busca de agendamento concluida com sucesso!', data);
 
         //Filtra os agendamentos que correspondem á data escolhidoa
         const horariosOcupado = agendamentos.filter(a => a.data.split("T")[0] === dataEscolhida).map(a => a.horario.replace("h", ""));
