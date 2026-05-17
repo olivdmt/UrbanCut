@@ -10,7 +10,7 @@ const Admin = sequelize.define('Admin', {
     nome: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: 'name' // 
+        field: 'name' 
     },
     email: {
         type: DataTypes.STRING,
@@ -23,7 +23,7 @@ const Admin = sequelize.define('Admin', {
     senha: {
         type: DataTypes.STRING,
         allowNull: false,
-
+        field: 'password' 
     }
 },
 {
