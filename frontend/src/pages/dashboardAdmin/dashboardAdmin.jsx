@@ -403,7 +403,7 @@ function DashboardAdmin() {
                         </div>
 
                         <div className="filter-groups">
-                            <button className="createAppoitments" type="button" onClick={HandleCreateAppointments}>NOVO AGENDAMENTO</button>
+                            <button className="createAppoitments" type="button" onClick={handleCreateAppointments}>NOVO AGENDAMENTO</button>
                             <button className="applyFilter" type="button" onClick={aplicarFiltros}>APLICAR FILTROS</button>
                         </div>
                     </form>
