@@ -9,8 +9,8 @@ const app = express();
 
 app.use(cors({
     origin: [
-        'https://urbancut-nkox.onrender.com', 
-        'http://localhost:5173'        
+        'https://urbancut-barber.netlify.app', 
+        'http://localhost:5173'             
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
