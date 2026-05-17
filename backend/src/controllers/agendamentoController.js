@@ -31,6 +31,7 @@ export const createOrder = async (req, res) => {
             servico: servico,
             data: data,
             horario: horario,
+            status: 'Pendente',
         });
 
         res.status(201).json({
