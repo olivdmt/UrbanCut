@@ -66,6 +66,7 @@ export const deleteOrder = async (req, res) => {
         res.status(404).json({
             success: false,
             message: 'Não foi possível deletar este produto',
+            error: error.message,
         });
     }
 };
