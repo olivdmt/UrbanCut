@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import API from '../../services/api';
 import { getAppointment, createAppointment, deleteAppointment, updateAppointment } from "../../services/agendamentoService";
-import { obterToken, adminEstaLogado, removerToken } from "../../services/adminAuth";
+import { obterToken, adminEstaLogado, removerToken, loginAdmin, getUsername } from "../../services/adminAuth";
 
 import '../dashboardAdmin/dashboardAdmin.css';
 
@@ -16,6 +16,8 @@ function DashboardAdmin() {
         data: '',
         cliente: '',
     });
+
+    const [username, setUsername] = useState(null);
 
     const HORARIOS = [
         "09:00", "10:00", "11:00", "12:00",
@@ -67,6 +69,17 @@ function DashboardAdmin() {
         }
         showAppointments();
     }, []);
+
+    const getAdminUsername = async () => {
+        try {
+            const data = await getUsername();
+            // setUsername(data);
+            console.log(data);
+        } catch (error) {
+            console.error('Não foi possível buscar os adminitradores no banco.', error.message);
+        }
+
+    }
 
     // Função disparada ao clicar no botão "Sair"
     function logout() {
@@ -367,7 +380,6 @@ function DashboardAdmin() {
         });
     };
 
-    // --- RENDERIZAÇÃO (JSX) ---
     return (
         <>
             <div className="container">
@@ -378,7 +390,7 @@ function DashboardAdmin() {
 
                 <section className="header">
                     <h1>Painel Administrativo</h1>
-                    <p>Bem vindo, Admin</p>
+                    <p>Bem vindo, {`${getAdminUsername()}`}</p>
                 </section>
 
                 {/* Seção de Filtros (Busca) */}

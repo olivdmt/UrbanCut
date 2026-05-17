@@ -1,6 +1,6 @@
-const cleanBaseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "");
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, "");
 
-const API_URL = `${cleanBaseUrl}/admin`;
+const API_URL = `${API_BASE}/admin`;
 
 export async function loginAdmin({ email, senha }) {
     const response = await fetch(`${API_URL}/login`, {
@@ -34,4 +34,27 @@ export function removerToken() {
 
 export function adminEstaLogado() {
     return !!obterToken();
+}
+
+export async function getUsername() {
+    const token = obterToken();
+
+    if (!token) {
+        throw new Error('Admin não autenticado');
+    }
+    const response = await fetch(`${API_URL}/perfil`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
+        },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.error || data.message || 'Não foi possível obter o nome de adm');
+    }
+
+    return data;
 }
