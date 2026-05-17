@@ -1,27 +1,24 @@
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import API from '../../services/api'
+import API from '../../services/api';
+import { getAppointment, createAppointment } from "../../services/agendamentoService";
 
 import '../agendamentos/agendamento.css';
 
 function Agendamentos() {
 
-    const navigate = useNavigate(); // Inicializa a função de navegação
-    // ARRAY para de objetos para armazenar os serviços
+    const navigate = useNavigate();
     const SERVICOS = [
         { value: "corte", label: "Corte Masculino - R$ 30" },
         { value: "barba", label: "Barba - R$ 12" },
         { value: "corte_barba", label: "Corte + Barba - R$ 42" },
         { value: "sobrancelha", label: "Sobrancelha - R$ 15" },
     ]
-    // Array para armazenar os Horários
-    const HORARIOS = ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00"];
+    const HORARIOS = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
     const [horariosDisponiveis, setHorariosDisponiveis] = useState(HORARIOS);
-    /// Inicializa o estado para carregamento
     const [loading, setLoading] = useState(false);
-    
-    //Criamos um objeto de estado para todos os campos
+
     const [formData, setFormData] = useState({
         nome: '',
         telefone: '',
@@ -32,8 +29,8 @@ function Agendamentos() {
 
     // Função que lida com o envio do formulário (Agendamentos)
     async function handleSubmit(e) {
-        e.preventDefault(); // Impede o carregamento da padráo da página
-        setLoading(true); // Bloqueia o botão
+        e.preventDefault();
+        setLoading(true);
 
         //Cria um pop up de carregamento enquanto o JSON de agendamento é enviado ao  banco de dados
         Swal.fire({
@@ -54,47 +51,23 @@ function Agendamentos() {
         })
 
         try {
-            // Faz a chamada para a API na rota "/agendamentos" no backend
-            const res = await fetch(`${API}/agendamentos`, {
-                method: "POST", // Método para envio de dados sensíveis
-                headers: {
-                    "Content-Type": "application/json", // Indica que estamos enviando um JSON 
-                },
-                // Aqui enviaremos uma requisção e passamos os dados que serão enviados
-                body: JSON.stringify(formData),
-            });
-
-            // Converte a resposta do servidor para objeto JavaScript
-            const data = await res.json();
-
-            // Verifica se a reposta HTTP indica erro (ex: 401 ou 404)
-            if (!res.ok) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Não foi possível fazer o agendamento",
-                    text: data.error || "Dados inválidos",
-                    background: "#1d1d1d",
-                    color: "#fff",
-                });
-                return; // Interrompe a execução aqui se houver erro
-            }
-
-             // Reseta os campos após o envio do formulário
-                setFormData({ 
-                    nome: "",
-                    telefone: "",
-                    servico: "",
-                    data: "",
-                    horario: "",
-                })
+            // Envia nosso payload para a service
+            const data = await createAppointment(formData);
+            console.log('Dados enviado com sucesso!');
+            setFormData({
+                nome: "",
+                telefone: "",
+                servico: "",
+                data: "",
+                horario: "",
+            })
 
             const Toast = Swal.mixin({
                 toast: true,
-                position: "top-end", // Canto superior direito
+                position: "top-end",
                 showConfirmButton: false,
                 timer: 2000,
                 timerProgressBar: true,
-                // Estilização
                 background: "#1d1d1d",
                 color: "#fff",
                 didOpen: (toast) => {
@@ -102,7 +75,7 @@ function Agendamentos() {
                     toast.addEventListener('mouseLeave', Swal.resumeTimer)
                 }
             })
-                
+
             Toast.fire({
                 icon: "success",
                 title: `Agendamento realizado, ${formData.nome}!`,
@@ -128,13 +101,13 @@ function Agendamentos() {
     // Função que irá que buscar os dias e os horários agendados e válidar se aquele horario está livre
     async function freeTime(e) {
         e.preventDefault();
-        // Faz a requisição na API com o metódo GET
-        const res = await fetch(`${API}/agendamentos`, {
-            method: "GET"
-        });
 
-        // Formata os dados recebido em objeto Json
-        const data = await res.json();
+        try {
+            const data = await getAppointment();
+            console.log('Agendamentos recebidos com sucesso:', data);
+        } catch (error) {
+            console.log('Não foi possível encontrar agendamentos.', error.message);
+        }
 
         // Busca o elemento horario e data pelo ID  e filtra os valores
         let time = formData.horario;
@@ -144,28 +117,23 @@ function Agendamentos() {
         const diaSelecionado = day;
         const horaSelecionada = time;
 
-        //Função para percorre todo o array de objetos
-        // O same.() percorre o array todo e item representa cada objeto dentro do array
-        // E some() retorna true se pelomenos um item satisfazer a condição e false se nenhum satisfazer
-        // Em outras palavras "Tem um agendamento neste mesmo dia no mesmo horário?"
+
         const agendado = data.some(item => {
             // Filtra a data de (2026-02-28T00:00:00.000Z) para ("2026-02-28", "00:00:00.000Z")
-            // E seleciona somente o primeiro índice
             const daiDoItem = item.data.split("T")[0]; //
-            // Filtra o horário para futura verificação (ex: 09:00) removendo o "H"
-            const horaDoItem = String(item.horario).slice(0,5);
-
+            // Filtra o horário para futura verificação (09:00) removendo o "H"
+            const horaDoItem = String(item.horario).slice(0, 5);
             // Padroniza o valor digitado no input para verificar com o banco de dados
-            const horaInput = String(horaSelecionada).slice(0,5);
+            const horaInput = String(horaSelecionada).slice(0, 5);
             /* 
                 A data do banco é igual a data selecionda? É
                 O horário do banco é igual o horário selecionado? É
                 Se as duas forem verdadeiras retorna True
             */
             return daiDoItem === diaSelecionado && horaDoItem === horaInput;
-        }); 
+        });
 
-        if (agendado) {            
+        if (agendado) {
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end", // Canto superior direito
@@ -180,7 +148,7 @@ function Agendamentos() {
                     toast.addEventListener('mouseLeave', Swal.resumeTimer)
                 }
             })
-                
+
             Toast.fire({
                 icon: "error",
                 title: `Este horário não está disponível ${formData.nome}!`,
@@ -201,15 +169,14 @@ function Agendamentos() {
         const dataEscolhida = e.target.value;
 
         // Atualiza o estado do formulário mantendo os dados anteriores e alterando apenas a data
-        setFormData(prev => ({  ...prev, data: dataEscolhida }));
+        setFormData(prev => ({ ...prev, data: dataEscolhida }));
 
-        // Busca todos os agendamentos existentes na API (Endpoint: /agendamentos)
-        const res = await fetch(`${API}/agendamentos`, {
-            method: "GET",
-        });
-
-        // Converte os dados recebidos do banco de dados em objeto JSON
-        const agendamentos = await res.json();
+        try {
+            const agendamentos = await getAppointment();
+            console.log('Busca de agendamento concluida com sucesso!', data);
+        } catch (error) {
+            console.error('Não foi possível buscar agendamentos.', error.message);
+        }
 
         //Filtra os agendamentos que correspondem á data escolhidoa
         const horariosOcupado = agendamentos.filter(a => a.data.split("T")[0] === dataEscolhida).map(a => a.horario.replace("h", ""));
@@ -222,14 +189,13 @@ function Agendamentos() {
 
         // Verificaçãi de consistência:
         // Se o usuário já tinha um horário selecionado e ele NÃO está mais disponivel na nova data, limpa o campo
-        setFormData(prev => (livres.includes(prev.horario) ? prev : { ...prev, horario : ""}));    
+        setFormData(prev => (livres.includes(prev.horario) ? prev : { ...prev, horario: "" }));
     }
-    
+
 
     //Função para atualizar o estado conforme o usuário digita
     const handleChange = (e) => {
         const { id, value, name } = e.target;
-        //O id ou  name do input deve ser igual a chave no objeto formData
         setFormData({
             ...formData,
             [id || name]: value
@@ -253,7 +219,7 @@ function Agendamentos() {
         }
 
         return v;
-        }
+    }
 
     return (
 
@@ -264,7 +230,7 @@ function Agendamentos() {
                     <button><i className="fa-solid fa-arrow-left"></i> Voltar</button>
                 </Link>
             </div>
-            
+
             <section className="agendamentos">
                 <div className="head">
                     <h1>Agendar Horário</h1>
@@ -290,15 +256,16 @@ function Agendamentos() {
                                 id="telefone"
                                 placeholder="(000) 0 0000-0000"
                                 value={formData.telefone}
-                                onChange={(e) => setFormData({ ...formData, telefone: maskTelefone(e.target.value),
+                                onChange={(e) => setFormData({
+                                    ...formData, telefone: maskTelefone(e.target.value),
                                 })}
-                             />
+                            />
                         </div>
                     </div>
 
                     <div className="forms-group">
                         <i className="fa-solid fa-scissors"><label htmlFor="servico">Serviço</label></i>
-                        <select 
+                        <select
                             id="servico"
                             value={formData.servico}
                             onChange={handleChange}
@@ -332,7 +299,7 @@ function Agendamentos() {
                             >
                                 <option value="">Selecione um Horario</option>
                                 {horariosDisponiveis.map(h => (<option key={h} value={h}>{h}</option>))}
-                               
+
                             </select>
                         </div>
                     </div>

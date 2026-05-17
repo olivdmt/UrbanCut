@@ -1,34 +1,50 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import API from '../../services/api'
+import API from '../../services/api';
+import { getAppointment, createAppointment, deleteAppointment, updateAppointment } from "../../services/agendamentoService";
 
-import '../dashboardAdmin/dashboardAdmin.css'
+import '../dashboardAdmin/dashboardAdmin.css';
+import { updateOrder } from "../../../../backend/src/controllers/agendamentoController";
 
 function DashboardAdmin() {
 
-        const HORARIOS = [
-            "09:00", "10:00", "11:00", "12:00",
-            "13:00", "14:00", "15:00", "16:00",
-            "17:00", "18:00", "19:00",
-        ];
-
-        const SERVICOS = [
-            { value: "corte", label: "Corte Masculino - R$ 30" },
-            { value: "barba", label: "Barba - R$ 12" },
-            { value: "corte_barba", label: "Corte + Barba - R$ 42" },
-            { value: "sobrancelha", label: "Sobrancelha - R$ 15" },
-        ]
-
-    const navigate = useNavigate(); 
-
-    useEffect(() => {
-        showAppointments();
-    }, []); //o ARRAY vazio faz a buscas rodar apenas uma vez
-    
     const [agendamentos, setAgendamentos] = useState([]);
     const [agendamentosFiltrados, setAgendamentosFiltrados] = useState([]);
 
+    const [formData, setFormData] = useState({
+        data: '',
+        cliente: '',
+    });
+
+    const HORARIOS = [
+        "09:00", "10:00", "11:00", "12:00",
+        "13:00", "14:00", "15:00", "16:00",
+        "17:00", "18:00", "19:00",
+    ];
+
+    const SERVICOS = [
+        { value: "corte", label: "Corte Masculino - R$ 30" },
+        { value: "barba", label: "Barba - R$ 12" },
+        { value: "corte_barba", label: "Corte + Barba - R$ 42" },
+        { value: "sobrancelha", label: "Sobrancelha - R$ 15" },
+    ];
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        async function showAppointments() {
+            try {
+                const data = await getAppointment();
+                console.log('Agendamentos buscado com sucesso!');
+            } catch (error) {
+                console.error('Não foi possível buscar agendamentos.', error.message);
+            }
+            setAgendamentos(data);
+        }
+
+        showAppointments();
+    }, []);
 
     // Função disparada ao clicar no botão "Sair"
     function logout() {
@@ -39,7 +55,7 @@ function DashboardAdmin() {
             icon: "question", // Icone de interrogação
             background: '#1d1d1d',
             color: '#fff',
-            showCancelButton: true, 
+            showCancelButton: true,
             cancelButtonColor: "rgb(0, 255, 251)",
             confirmButtonText: "Sair",
             cancelButtonText: "Cancelar",
@@ -57,15 +73,6 @@ function DashboardAdmin() {
         });
     }
 
-    // Estado para armazenar o que o usuário digita nos campos de filtro
-    const [formData, setFormData] = useState({
-        data: '',
-        cliente: '',
-    });
-
-    // --- FUNÇÕES DE MANIPULAÇÃO ---
-
-    // Atualiza o estado formData sempre que o usuário digita nos filtros
     const handleChange = (e) => {
         const { id, value } = e.target;
         setFormData({
@@ -79,10 +86,9 @@ function DashboardAdmin() {
         const clienteFiltro = formData.cliente.trim().toLowerCase();
 
         const filtrados = agendamentos.filter((item) => {
-            //Filtro por cliente (contém)
+            //Filtro por cliente
             const matchCliente = clienteFiltro ? item.nome?.toLowerCase().includes(clienteFiltro) : true;
-
-            // Filtro por data (igual)
+            // Filtro por data 
             // item.data pode vir com ISO "2026-02-22T00:00.000Z"
             const itemData = String(item.data).slice(0, 10);
             const matchData = dataFiltro ? itemData === dataFiltro : true;
@@ -100,12 +106,11 @@ function DashboardAdmin() {
     // };
 
     // Função responsável pela criação de um agendamento pela tela Administrativa
-    const createAppointments = async () => {
+    const handleCreateAppointments = async () => {
+        const servicoOptions = SERVICOS.map((s) =>
+            `<option value="${s.label}" ${SERVICOS == s.label ? "selected" : ""}>${s.label}</option>`).join();
 
-        const servicoOptions = SERVICOS.map((s) => 
-        `<option value="${s.label}" ${SERVICOS == s.label ? "selected" : ""}>${s.label}</option>`).join();
-
-        const { value: formValues} = await Swal.fire({
+        const { value: formValues } = await Swal.fire({
             title: 'Deseja criar um novo agendamento?',
             background: '#1d1d1d',
             color: '#fff',
@@ -136,7 +141,7 @@ function DashboardAdmin() {
                         ${servicoOptions}
                     </select>
                     `,
-            focusConfirm:  false,
+            focusConfirm: false,
             showCancelButton: true,
             confirmButtonText: 'Salvar Agendamento',
             cancelButtonText: 'Cancelar',
@@ -144,32 +149,24 @@ function DashboardAdmin() {
             cancelButtonColor: '#ff4d4d'
         });
 
-
-        // Faz a requisição na API pela rota agendamentos usando o metódo POST
-        const res = await fetch(`${API}/agendamentos`, {
-            method: "POST",
-            body: JSON.stringify(formValues)
-        });
-
-        // Transforma o dados da requisição em objeto JSON
-        const data = await res.json();
+        try {
+            const data = await createAppointment(formValues);
+            console.log('Agendamento criado com sucesso!', data);
+        } catch (error) {
+            console.error('Não foi possível criar um novo agendamento.', error.message);
+        }
     }
 
-    // Função assíncrona para editar (espera a resposta do SweetAlert)
     const handleEdit = async (agendamento) => {
-
         const servicoBanco = String(agendamento.servico || "").trim();
-
-
-        const horarioBanco = String(agendamento.horario || "").slice(0,5).trim();
-        
+        const horarioBanco = String(agendamento.horario || "").slice(0, 5).trim();
         const servicoOptions = SERVICOS.map((s) =>
             `<option value="${s.label}" ${servicoBanco === s.label ? "selected" : ""}>${s.label}</option>`).join("");
-        
+
         const horarioOptions = HORARIOS.map((h) =>
             `<option value="${h}" ${horarioBanco === h ? "selected" : ""}>${h}</option>`).join("")
-        
-        const { value: formValues} = await Swal.fire({
+
+        const { value: formValues } = await Swal.fire({
             title: 'Editar Agendamentos',
             background: '#1d1d1d',
             color: '#fff',
@@ -245,26 +242,12 @@ function DashboardAdmin() {
         if (!formValues) return;
 
         try {
-            // Faz a requisição no Backend na rota "/agendamentos"
-            const res = await fetch(`${API}/agendamentos/${agendamento.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formValues),
-            });
-
-            // Se a resiquisição não tiver sucesso
-            // Exibi o erro
-            if (!res.ok) {
-                const msg = await res.text();
-                throw new Error(`HTTP ${res.status} - ${msg}`);
-            }
-
-            // Atualiza a lista na tela (state)
+            const data = await updateAppointment(formValues);
+            console.log('Agendamento editado com sucesso!', data);
+            // Atualiza a lista na tela
             setAgendamentosFiltrados((prev) =>
                 prev.map((item) =>
-                    item.id === agendamento.id ? { ...item, ...formValues} : item
+                    item.id === agendamento.id ? { ...item, ...formValues } : item
                 )
             );
 
@@ -292,7 +275,7 @@ function DashboardAdmin() {
                 }
             })
         } catch (error) {
-            console.error(error);
+            console.error(error.message);
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end', // Alinha no canto superior direito
@@ -319,7 +302,7 @@ function DashboardAdmin() {
         }
     };
 
-    // Função para excluir um agendamento
+    
     const handleDelete = (id, nome) => {
         Swal.fire({
             title: 'Tem certeza?',
@@ -352,7 +335,7 @@ function DashboardAdmin() {
                             background: '#1d1d1d',
                             color: '#fff'
                         });
-                
+
                     } else {
                         // Caso o servidor responda mas com erro (ex: 400 ou 401)
                         throw new Error("Erro ao deletar no servidor")
@@ -377,45 +360,45 @@ function DashboardAdmin() {
     // Função que ira buscar as informações no backend
     async function showAppointments(e) {
         try {
-         // Faz a chamada na API    
-         const res = await fetch(`${API}/agendamentos`, {
-            method: "GET"
-         })
-         // Se houver error na busca pela API
-        if (!res.ok) {
-            throw new Error("Erro ao buscar dados")
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end', // Canto superior direito
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                background: '#1d1d1d',
-                color: '#fff',
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseLeave', Swal.resumeTimer)
-                }
+            // Faz a chamada na API    
+            const res = await fetch(`${API}/agendamentos`, {
+                method: "GET"
             })
+            // Se houver error na busca pela API
+            if (!res.ok) {
+                throw new Error("Erro ao buscar dados")
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end', // Canto superior direito
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    background: '#1d1d1d',
+                    color: '#fff',
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseLeave', Swal.resumeTimer)
+                    }
+                })
 
 
-            Toast.fire({
-                icon: 'error',
-                title: 'Erro na busca',
-                text: `Não foi possível encontrar agendamentos: ${error}`,
-                customClass: {
-                    poup: 'my-custom-toast',
-                    title: 'my-custom-title'
-                }
-            })
-        }
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Erro na busca',
+                    text: `Não foi possível encontrar agendamentos: ${error}`,
+                    customClass: {
+                        poup: 'my-custom-toast',
+                        title: 'my-custom-title'
+                    }
+                })
+            }
 
-        // Transforma os dados recebidos em JSON
-        const data = await res.json();
+            // Transforma os dados recebidos em JSON
+            const data = await res.json();
 
-        // Atualiza o estado 
-        setAgendamentos(data);
-        setAgendamentosFiltrados(data);
+            // Atualiza o estado 
+            setAgendamentos(data);
+            setAgendamentosFiltrados(data);
 
         } catch (error) {
             Swal.fire({
@@ -432,7 +415,7 @@ function DashboardAdmin() {
             <div className="container">
                 {/* Botão de navegação para voltar à Home */}
                 <div className="btn-back-dash">
-                        <button onClick={logout}><i className="fa-solid fa-right-from-bracket"></i> Sair</button>
+                    <button onClick={logout}><i className="fa-solid fa-right-from-bracket"></i> Sair</button>
                 </div>
 
                 <section className="header">
@@ -453,16 +436,16 @@ function DashboardAdmin() {
                         {/* Input de Nome do Cliente */}
                         <div className="filter-groups">
                             <label htmlFor="cliente">Cliente</label>
-                            <input 
-                                type="text" 
-                                id="cliente" 
+                            <input
+                                type="text"
+                                id="cliente"
                                 placeholder="Digite o nome do Cliente"
-                                onChange={handleChange} 
+                                onChange={handleChange}
                             />
                         </div>
-                        
+
                         <div className="filter-groups">
-                            <button className="createAppoitments" type="button" onClick={createAppointments}>NOVO AGENDAMENTO</button>
+                            <button className="createAppoitments" type="button" onClick={HandleCreateAppointments}>NOVO AGENDAMENTO</button>
                             <button className="applyFilter" type="button" onClick={aplicarFiltros}>APLICAR FILTROS</button>
                         </div>
                     </form>
@@ -496,7 +479,7 @@ function DashboardAdmin() {
                                     agendamentosFiltrados.map((item) => (
                                         <tr key={item.id}>
                                             {/* Formata o item data para remover o padrão ISO 8601*/}
-                                            <td>{new Date(item.data).toLocaleDateString('pt-BR', { timeZone: 'UTC'})}</td>
+                                            <td>{new Date(item.data).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                                             <td>{item.horario}</td>
                                             <td>{item.nome}</td>
                                             <td>{item.servico}</td>
