@@ -41,7 +41,7 @@ export const loginAdmin = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Erro no login do admin:", error);
-        return res.status(500).json({ message: "Erro interno no servidor" });
+        console.error("Erro detalhado no login do admin:", error);
+        return res.status(500).json({ message: "Erro interno no servidor", error: error.message });
     }
 };

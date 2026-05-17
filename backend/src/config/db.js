@@ -1,11 +1,12 @@
 import Sequelize from 'sequelize';
 import 'dotenv/config';
 
+const isLocalhost = process.env.DATABASE_URL && (process.env.DATABASE_URL.includes('localhost') || process.env.DATABASE_URL.includes('127.0.0.1'));
+
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
-    protocol: 'postgres',
     dialectOptions: {
-        ssl: {
+        ssl: isLocalhost ? false : {
             require: true,
             rejectUnauthorized: false,
         },
