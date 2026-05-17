@@ -25,7 +25,7 @@ export const loginAdmin = async (req, res) => {
 
         // 4. Se passou, gera o token de acesso
         const token = jwt.sign(
-            { id: admin.id, email: admin.email },
+            { id: admin.id, email: admin.email, tipo: "admin"},
             process.env.JWT_SECRET || 'seu_secret_global',
             { expiresIn: '1d' }
         );
