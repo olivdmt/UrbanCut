@@ -17,7 +17,7 @@ async function startServer() {
             console.log(`Server running on the port: ${PORT}`);
         });
     } catch (error) {
-        console.log('Error when starting application')
+        console.log('Erro ao inicar aplicação', error)
     }
 }
 
