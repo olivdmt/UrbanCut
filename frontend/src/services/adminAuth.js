@@ -3,13 +3,12 @@ const cleanBaseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').r
 const API_URL = `${cleanBaseUrl}/admin`;
 
 export async function loginAdmin({ email, senha }) {
-
     const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
             "Content-Type" : "application/json",
         },
-        body: JSON.stringify({ email, senha})
+        body: JSON.stringify({ email, senha })
     });
 
     const data = await response.json();
@@ -19,7 +18,7 @@ export async function loginAdmin({ email, senha }) {
     }
 
     return data;
-};
+}
 
 export function salvarToken(token) {
   return localStorage.setItem("admin_token", token);  
