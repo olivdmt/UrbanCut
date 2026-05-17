@@ -26,6 +26,11 @@ const Agendamento = sequelize.define('Agendamento', {
     horario: {
         type: DataTypes.TIME,
         allowNull: false,
+    },
+    status: {
+        type: DataTypes.ENUM('Pendente', 'Confirmado'),
+        allowNull: false,
+        defaultValue: 'Pendente',
     }
 
 });
