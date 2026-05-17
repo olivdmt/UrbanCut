@@ -28,39 +28,33 @@ function Agendamentos() {
     });
 
     // Função que lida com o envio do formulário (Agendamentos)
+   // Função que lida com o envio do formulário (Agendamentos)
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
 
-        //Cria um pop up de carregamento enquanto o JSON de agendamento é enviado ao  banco de dados
+        // Pop up de carregamento
         Swal.fire({
             title: 'Aguarde!',
             text: 'Estamos organizando seu agendamento...',
             background: 'rgba(29, 29, 29, 0.6)',
             color: '#fff',
-            allowOutsideClick: false, // Impede de fechar clicando fora
-            allowEscapeKey: false, // Impede de fechar com o teclado
+            allowOutsideClick: false,
+            allowEscapeKey: false,
             showConfirmButton: false,
             customClass: {
                 popup: 'my-glass-popup',
                 backdrop: 'my-class-backdrop'
             },
             didOpen: () => {
-                Swal.showLoading(); // Adiciona o ícone de carregamento giratório
+                Swal.showLoading();
             }
-        })
+        });
 
         try {
-            // Envia nosso payload para a service
-            const data = await createAppointment(formData);
-            console.log('Dados enviado com sucesso!', data);
-            setFormData({
-                nome: "",
-                telefone: "",
-                servico: "",
-                data: "",
-                horario: "",
-            })
+            // 1. Envia o payload para a service
+            const responseData = await createAppointment(formData);
+            console.log('Dados enviado com sucesso!', responseData);
 
             const Toast = Swal.mixin({
                 toast: true,
@@ -72,22 +66,33 @@ function Agendamentos() {
                 color: "#fff",
                 didOpen: (toast) => {
                     toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseLeave', Swal.resumeTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer) // Corrigido camelCase do mouseleave aqui!
                 }
-            })
+            });
 
+            // 2. DISPARA O TOAST PRIMEIRO (Enquanto o formData ainda tem os dados do cliente)
             Toast.fire({
                 icon: "success",
                 title: `Agendamento realizado, ${formData.nome}!`,
-                text: `Aguardamos você no dia ${formData.data} as ${formData.horario}!`,
+                text: `Aguardamos você no dia ${formData.data} às ${formData.horario}!`,
                 customClass: {
                     popup: 'my-custom-toast',
                     title: 'my-custom-title'
                 }
             });
-            setLoading(false);
+
+            // 3. APENAS AGORA LIMPA O FORMULÁRIO
+            setFormData({
+                nome: "",
+                telefone: "",
+                servico: "",
+                data: "",
+                horario: "",
+            });
+
         } catch (err) {
-            //Caso o servidor estaja offline ou ocrra erro de rede
+            console.error("Erro real capturado no submit:", err);
+            // Caso o servidor esteja offline ou ocorra erro de rede
             Swal.fire({
                 icon: "error",
                 title: "Erro de conexão",

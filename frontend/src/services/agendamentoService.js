@@ -17,13 +17,13 @@ export const getAppointment = async () => {
     return data.data || [];
 };
 
-export const createAppointment = async (dados) => {
+export const createAppointment = async (formData) => {
     const reponse = await fetch(`${API}/agendamentos`, {
         method: 'POST',
         headers: {
             'Content-Type' : 'application/json'
         },
-        body: JSON.stringify(dados),
+        body: JSON.stringify(formData),
     });
 
     const data = await response.json();
@@ -32,7 +32,7 @@ export const createAppointment = async (dados) => {
         throw new Error(data.error || data.message || 'Não foi possível criar um agendamento.');
     }
 
-    return data.data;
+    return data;
 }
 
 export const deleteAppointment = async(id) => {
