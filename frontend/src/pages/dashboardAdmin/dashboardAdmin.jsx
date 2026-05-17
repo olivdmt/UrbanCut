@@ -3,9 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import API from '../../services/api';
 import { getAppointment, createAppointment, deleteAppointment, updateAppointment } from "../../services/agendamentoService";
+import { obterToken, adminEstaLogado, removerToken } from "../../services/adminAuth";
 
 import '../dashboardAdmin/dashboardAdmin.css';
-import { updateOrder } from "../../../../backend/src/controllers/agendamentoController";
 
 function DashboardAdmin() {
 
@@ -37,6 +37,8 @@ function DashboardAdmin() {
             try {
                 const data = await getAppointment();
                 console.log('Agendamentos buscado com sucesso!');
+                setAgendamentos(data);
+                setAgendamentosFiltrados(data);
             } catch (error) {
                 console.error('Não foi possível buscar agendamentos.', error.message);
                 const Toast = Swal.mixin({
@@ -62,8 +64,6 @@ function DashboardAdmin() {
                     }
                 });
             }
-            setAgendamentos(data);
-            setAgendamentosFiltrados(data);
         }
         showAppointments();
     }, []);

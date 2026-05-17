@@ -47,7 +47,8 @@ function Admin() {
     });
     
     try {
-      const data = await adminAuth(formData);
+      const data = await loginAdmin(formData);
+      salvarToken(data.token);
       console.log('Admin authenticado com sucesso!', data);
       // Exibe alerta de sucesso
       Swal.fire({
