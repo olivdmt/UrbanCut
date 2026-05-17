@@ -179,7 +179,7 @@ function DashboardAdmin() {
         }
     }
 
-    const handleEdit = async (agendamento) => {
+    const handleEdit = async (id, agendamento) => {
         const servicoBanco = String(agendamento.servico || "").trim();
         const horarioBanco = String(agendamento.horario || "").slice(0, 5).trim();
         const servicoOptions = SERVICOS.map((s) =>
@@ -264,7 +264,7 @@ function DashboardAdmin() {
         if (!formValues) return;
 
         try {
-            const data = await updateAppointment(formValues);
+            const data = await updateAppointment(id, formValues);
             console.log('Agendamento editado com sucesso!', data);
             // Atualiza a lista na tela
             setAgendamentosFiltrados((prev) =>
@@ -341,7 +341,7 @@ function DashboardAdmin() {
             // Se o usuário confirmou a exclusão
             if (result.isConfirmed) {
                 try {
-                    const data = await deleteAppointment(id, nome);
+                    const data = await deleteAppointment(id);
                     const novaLista = agendamentos.filter(item => item.id !== id);
                     setAgendamentosFiltrados(novaLista);
                     Swal.fire({
@@ -449,7 +449,7 @@ function DashboardAdmin() {
                                             </td>
                                             <td>
                                                 {/* Botão Editar: passa o objeto 'item' inteiro */}
-                                                <button className="btn-edit" onClick={() => handleEdit(item)}>
+                                                <button className="btn-edit" onClick={() => handleEdit(item.id, item)}>
                                                     <i className="fa-solid fa-pen-to-square"></i>
                                                 </button>
                                             </td>

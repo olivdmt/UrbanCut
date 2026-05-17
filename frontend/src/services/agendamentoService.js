@@ -49,13 +49,13 @@ export const deleteAppointment = async(id) => {
     return data;
 }
 
-export const updateAppointment = async(id, dados) => {
+export const updateAppointment = async(id, formValue) => {
     const response = await fetch(`${API}/agendamentos/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type' : 'application/json',
         },
-        body: JSON.stringify(dados),
+        body: JSON.stringify(formValue),
     });
 
     const data = await response.json();
